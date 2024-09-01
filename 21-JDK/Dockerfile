@@ -9,7 +9,7 @@ ARG TARGETPLATFORM
 ARG GRAAL_VERSION=21.0.2
 ARG JAVA_VERSION=21
 
-MAINTAINER RikoDEV, <kontakt@riko.dev>
+LABEL       author="Aretzera" maintainer="agroup168@gmail.com"
 
 ENV DEBIAN_FRONTEND=noninteractive
 

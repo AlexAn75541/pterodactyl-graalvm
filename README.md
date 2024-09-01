@@ -19,5 +19,5 @@ ___
 | 21   	| ❌                                                             | `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK` 	| ❌                                         	                |
 | 22    | ❌                                     	                     | `ghcr.io/alexan75541/pterodactyl-graalvm:22-JDK` 	| ❌                                         	                |
 
-Configuration using JDK21 from Oracle's GraalVM: `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`
+Configuration using JDK21 from Oracle's GraalVM (Trust me its ~~ GraalVM Enterprise): `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`
 ___

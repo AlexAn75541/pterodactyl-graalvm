@@ -10,14 +10,14 @@ ___
 
 ## Docker Container Configuration
 
-| Java | Standard                               	                       | JDK (Mostly CE Build)                              | Enterprise                                                  	|
-|------	|--------------------------------------------------------------- |--------------------------------------------------- |-------------------------------------------------------------	|
-| 11    | `ghcr.io/alexan75541/pterodactyl-graalvm:11` 	                 | ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:11-EE` 	    |
-| 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17` 	                 | `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` 	|
-| 19   	| `ghcr.io/alexan75541/pterodactyl-graalvm:19` 	                 | ❌                                          	    | ❌                                         	                |
-| 20   	| ❌                                     	                     | `ghcr.io/alexan75541/pterodactyl-graalvm:20-JDK` 	| ❌                                         	                |
-| 21   	| ❌                                                             | `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK` 	| ❌                                         	                |
-| 22    | ❌                                     	                     | `ghcr.io/alexan75541/pterodactyl-graalvm:22-JDK` 	| ❌                                         	                |
+| Java | Standard                               	     | JDK (Mostly CE Build)                              | Enterprise                                      |
+|------	|--------------------------------------------- |--------------------------------------------------- |------------------------------------------------ |
+| 11    | `ghcr.io/alexan75541/pterodactyl-graalvm:11` | ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:11-EE` |
+| 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17` | `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` |
+| 19   	| `ghcr.io/alexan75541/pterodactyl-graalvm:19` | ❌                                          	    | ❌                                         	  |
+| 20   	| ❌                                     	   | `ghcr.io/alexan75541/pterodactyl-graalvm:20-JDK` 	| ❌                                         	  |
+| 21   	| ❌                                           | `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK` 	| ❌                                         	  |
+| 22    | ❌                                     	   | `ghcr.io/alexan75541/pterodactyl-graalvm:22-JDK` 	| ❌                                         	  |
 
 Configuration using JDK21 from Oracle's GraalVM (Trust me its ~~ GraalVM Enterprise): `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`
 ___

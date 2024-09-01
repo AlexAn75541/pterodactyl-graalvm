@@ -5,7 +5,7 @@
 GraalVM is a high-performance runtime that provides significant improvements in application performance and efficiency which is ideal for microservices. https://www.graalvm.org/
 
 
-This repo will be having many unofficial ptedrodactyl build lol
+This repo will be having many unofficial ptedrodactyl build, I do not have any affiliate with rikodev, I just make this repo for my personal use lol 🧐
 
 ___
 
@@ -17,7 +17,7 @@ ___
 | 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` 	|
 | 19   	| `ghcr.io/alexan75541/pterodactyl-graalvm:19` 	| ❌                                          	| ❌                                         	|
 | 20   	| ❌                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:20-JDK` 	| ❌                                         	|
-| 21   	| (Unoficial)`ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK` 	| ❌                                         	|
+| 21   	| (Unofficial)`ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK` 	| ❌                                         	|
 | 22    | ❌                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:22-JDK` 	| ❌                                         	|
 
 ___

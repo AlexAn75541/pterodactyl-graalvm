@@ -13,11 +13,11 @@ ___
 
 | Java | Standard                               	| JDK                                        	| Enterprise                                	|
 |------	|----------------------------------------	|--------------------------------------------	|-------------------------------------------	|
-| 11    | `ghcr.io/rikodev/pterodactyl-graalvm:11` 	| ❌                                          	| `ghcr.io/rikodev/pterodactyl-graalvm:11-EE` 	|
-| 17    | `ghcr.io/rikodev/pterodactyl-graalvm:17` 	| `ghcr.io/rikodev/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/rikodev/pterodactyl-graalvm:17-EE` 	|
-| 19   	| `ghcr.io/rikodev/pterodactyl-graalvm:19` 	| ❌                                          	| ❌                                         	|
-| 20   	| ❌                                     	| `ghcr.io/rikodev/pterodactyl-graalvm:20-JDK` 	| ❌                                         	|
-| 21   	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`                                     	| `ghcr.io/rikodev/pterodactyl-graalvm:21-JDK` 	| ❌                                         	|
-| 22    | ❌                                     	| `ghcr.io/rikodev/pterodactyl-graalvm:22-JDK` 	| ❌                                         	|
+| 11    | `ghcr.io/alexan75541/pterodactyl-graalvm:11` 	| ❌                                          	| `ghcr.io/alexan75541/pterodactyl-graalvm:11-EE` 	|
+| 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` 	|
+| 19   	| `ghcr.io/alexan75541/pterodactyl-graalvm:19` 	| ❌                                          	| ❌                                         	|
+| 20   	| ❌                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:20-JDK` 	| ❌                                         	|
+| 21   	| (Unoficial)`ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK` 	| ❌                                         	|
+| 22    | ❌                                     	| `ghcr.io/alexan75541/pterodactyl-graalvm:22-JDK` 	| ❌                                         	|
 
 ___

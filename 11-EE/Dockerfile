@@ -6,7 +6,7 @@
 FROM ubuntu:22.04
 
 ARG TARGETPLATFORM
-ARG GRAAL_VERSION=22.3.2
+ARG GRAAL_VERSION=22.3.5
 ARG JAVA_VERSION=11
 
 LABEL       author="Aretzera" maintainer="agroup168@gmail.com"
@@ -24,7 +24,7 @@ RUN apt-get update -y \
          "linux/amd64")  ARCH=linux-amd64  ;; \
          "linux/arm64")  ARCH=linux-aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_2/graalvm-ee-java11-${ARCH}-22.3.2.tar.gz \
+  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://download.oracle.com/otn/utilities_drivers/oracle-labs/graalvm-ee-java11-linux-amd64-22.3.5.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \
   && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \

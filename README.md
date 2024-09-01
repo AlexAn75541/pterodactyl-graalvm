@@ -10,7 +10,7 @@ ___
 
 ## Docker Container Configuration
 
-| Java | Standard                               	                       | JDK                                                | Enterprise                                                  	|
+| Java | Standard                               	                       | JDK (CE Build)                                     | Enterprise                                                  	|
 |------	|--------------------------------------------------------------- |--------------------------------------------------- |-------------------------------------------------------------	|
 | 11    | `ghcr.io/alexan75541/pterodactyl-graalvm:11` 	                 | ❌                                          	    | (Failed)`ghcr.io/alexan75541/pterodactyl-graalvm:11-EE` 	    |
 | 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17` 	                 | `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| (Not really)`ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` 	|

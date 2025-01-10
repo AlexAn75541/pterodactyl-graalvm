@@ -22,3 +22,5 @@ ___
 
 *Additional configuration using JDK21 from Oracle's GraalVM (Trust me this one is almost the same as GraalVM Enterprise): `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-2`
 ___
+
+yay

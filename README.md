@@ -33,9 +33,11 @@ ___
 | 20   	| ❌                                     	   | 
 | 21   	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-EEequivalent`| 
 | 22    | ❌                                     	   | 
-| 23   | `ghcr.io/alexan75541/pterodactyl-graalvm:23-JDK-EEequivalent`|
+| 23   | `ghcr.io/alexan75541/pterodactyl-graalvm:23-JDK-EEequivalent`**|
 
 *JDK mainly pulled from GraalVM's Website and Oracle's JDK Archive 
+
+**JDK23 Currently not support `-Dgraal.OptWriteMotion=true` option
 
 And I will Update 22 and 20 additional configs soon :>
 ___

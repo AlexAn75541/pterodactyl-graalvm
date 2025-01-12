@@ -1,4 +1,4 @@
-@@ -0,0 +1,48 @@
+
 # ----------------------------------
 # Pterodactyl Core Dockerfile
 # Environment: Java

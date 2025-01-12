@@ -28,12 +28,12 @@ ___
 |------	|--------------------------------------------- |
 | 8     | ❌                                          | 
 | 11    | ❌                                          | 
-| 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17-EEequivalent` | 
+| 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK-EEequivalent`| 
 | 19   	| ❌                                             | 
 | 20   	| ❌                                     	   | 
-| 21   	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-EEequivalent`| 
+| 21   	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-EEequivalent`| 
 | 22    | ❌                                     	   | 
-| 23   | `ghcr.io/alexan75541/pterodactyl-graalvm:23-EEequivalent`|
+| 23   | `ghcr.io/alexan75541/pterodactyl-graalvm:23-JDK-EEequivalent`|
 
 *JDK pulled mainly from GraalVM's Website and Oracle's Archive
 ___

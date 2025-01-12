@@ -3,11 +3,10 @@
 # Environment: Java
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG TARGETPLATFORM
-ARG GRAAL_VERSION=22.3.5
-ARG JAVA_VERSION=11
+ARG JAVA_VERSION=21
 
 LABEL       author="Aretzera" maintainer="agroup168@gmail.com"
 
@@ -21,10 +20,10 @@ RUN apt-get update -y \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
-         "linux/amd64")  ARCH=linux-amd64  ;; \
-         "linux/arm64")  ARCH=linux-aarch64  ;; \
+         "linux/amd64")  ARCH=x64  ;; \
+         "linux/arm64")  ARCH=aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/AlexAn75541/jdks/releases/download/new/graalvm-ee-java11-linux-amd64-21.3.12.tar.gz \
+  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \
   && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \

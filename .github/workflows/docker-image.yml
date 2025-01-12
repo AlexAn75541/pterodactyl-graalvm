@@ -14,16 +14,20 @@ jobs:
       fail-fast: false
       matrix:
         tag:
+          - 8-EE
           - 11
           - 17
           - 19
           - 17-JDK
+          - 17-JDK-EEequivalent
           - 20-JDK
           - 21-JDK
-          - 21-JDK-2
+          - 21-JDK-EEequivalent
           - 22-JDK
           - 11-EE
           - 17-EE
+          - 23
+          - 23-JDK-EEequivalent
     steps:
       - name: Checkout
         uses: actions/checkout@v3

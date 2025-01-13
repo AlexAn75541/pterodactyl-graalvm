@@ -1,6 +1,6 @@
 
-![license mit](https://img.shields.io/badge/license-MIT-green) 
-[![build graalvm](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml)
+![license mit and idk any of this](https://img.shields.io/badge/license-MIT-green) 
+[![build graalvm and yea im dumb](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml)
 
 GraalVM is a high-performance runtime that provides significant improvements in application performance and efficiency which is ideal for microservices. https://www.graalvm.org/
 

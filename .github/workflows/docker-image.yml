@@ -70,8 +70,8 @@ jobs:
       - name: Delete untagged ghcr
         uses: Chizkiyahu/delete-untagged-ghcr-action@v6.0.0
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          untagged_only: true
+            token: ${{ secrets.PAT_TOKEN }}
+            repository_owner: ${{ github.repository_owner }}
+            untagged_only: true
+            owner_type: user
           

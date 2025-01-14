@@ -72,3 +72,4 @@ jobs:
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
             untagged_only: true
+            owner_type: user

@@ -1,9 +1,8 @@
 name: Delete Untagged Docker Images
 
 on:
-  push:
-    branches:
-      - dev # or specify the branch you want to monitor
+  schedule:
+    - cron: '*/1 * * * *' # Runs every minute
   workflow_dispatch:
 
 jobs:

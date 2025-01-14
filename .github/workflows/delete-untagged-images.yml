@@ -1,19 +1,22 @@
-name: Delete Untagged Docker Images
+name: Delete Package Versions
 
 on:
-  schedule:
-    - cron: '*/1 * * * *' # Runs every minute
+  push:
+    branches:
+      - master # or specify the branch you want to monitor
   workflow_dispatch:
 
 jobs:
-  delete-untagged:
+  delete-packages:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Delete untagged Docker images
+      - name: Delete package versions
         uses: actions/delete-package-versions@v5
         with:
-            token: ${{ secrets.PAT_TOKEN }} #${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
+          package-name: ${{ github.repository }}
+          owner: ${{ github.repository_owner }}
 

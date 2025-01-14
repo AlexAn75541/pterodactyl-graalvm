@@ -2,9 +2,9 @@ name: build graalvm
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "dev" ]
 
 jobs:
   pterodactyl-graalvm:
@@ -74,7 +74,7 @@ jobs:
             token: ${{ secrets.PAT_TOKEN }}
             repository_owner: ${{ github.repository_owner }}
             repository: ${{ github.repository }}
-            username: ${{ github.repository_owner }}
-            password: YES_FORFUCKSAKES
+            username: ${{ github.actor }}
+            password: ${{ inputs.token }}
             untagged_only: true
             owner_type: user

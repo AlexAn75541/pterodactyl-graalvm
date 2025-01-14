@@ -68,4 +68,10 @@ jobs:
           tags: ${{ steps.meta_graalvm.outputs.tags }}
           labels: ${{ steps.meta_graalvm.outputs.labels }}
       - name: Delete untagged ghcr
-        uses: Chizkiyahu/delete-untagged-ghcr-action@v6.0.0    
+        uses: Chizkiyahu/delete-untagged-ghcr-action@v6.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          untagged_only: true
+          

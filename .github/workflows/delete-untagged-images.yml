@@ -1,0 +1,20 @@
+name: Delete Untagged Docker Images
+
+on:
+  push:
+    branches:
+      - dev # or specify the branch you want to monitor
+  workflow_dispatch:
+
+jobs:
+  delete-untagged:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Delete untagged Docker images
+        uses: camargo/delete-untagged-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+

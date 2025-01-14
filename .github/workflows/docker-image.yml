@@ -2,9 +2,9 @@ name: build graalvm
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "dev" ]
 
 jobs:
   pterodactyl-graalvm:
@@ -67,14 +67,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_graalvm.outputs.tags }}
           labels: ${{ steps.meta_graalvm.outputs.labels }}
-      - name: Delete all containers from repository without tags
-        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
-        with:
-            registry: ghcr.io
-            token: ${{ secrets.PAT_TOKEN }}
-            repository_owner: ${{ github.repository_owner }}
-            repository: ${{ github.repository }}
-            username: ${{ github.repository_owner }}
-            password: YES_FORFUCKSAKES
-            untagged_only: true
-            owner_type: user

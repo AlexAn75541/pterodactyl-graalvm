@@ -73,5 +73,7 @@ jobs:
             token: ${{ secrets.PAT_TOKEN }}
             repository_owner: ${{ github.repository_owner }}
             repository: ${{ github.repository }}
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
             untagged_only: true
             owner_type: user

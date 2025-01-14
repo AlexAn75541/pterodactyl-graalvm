@@ -67,11 +67,11 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_graalvm.outputs.tags }}
           labels: ${{ steps.meta_graalvm.outputs.labels }}
-      - name: Delete untagged ghcr
-        uses: Chizkiyahu/delete-untagged-ghcr-action@v6.0.0
+      - name: Delete all containers from repository without tags
+        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
         with:
             token: ${{ secrets.PAT_TOKEN }}
             repository_owner: ${{ github.repository_owner }}
+            repository: ${{ github.repository }}
             untagged_only: true
             owner_type: user
-          

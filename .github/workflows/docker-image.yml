@@ -73,5 +73,6 @@ jobs:
             token: ${{ secrets.GITHUB_TOKEN }}
             repository_owner: ${{ github.repository_owner }}
             repository: ${{ github.repository }}
+            package-name: pterodactyl-graalvm
             untagged_only: true
             owner_type: user

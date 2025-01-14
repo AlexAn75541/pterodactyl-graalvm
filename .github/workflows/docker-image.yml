@@ -74,6 +74,6 @@ jobs:
             repository_owner: ${{ github.repository_owner }}
             repository: ${{ github.repository }}
             username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
+            password: ${{ secrets.CI_TOKEN }}
             untagged_only: true
             owner_type: user

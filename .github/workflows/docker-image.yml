@@ -71,6 +71,7 @@ jobs:
         uses: Chizkiyahu/delete-untagged-ghcr-action@v6
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
-            package-name: ghcr.io/alexan75541/pterodactyl-graalvm
+            repository_owner: ${{ github.repository_owner }}
+            repository: ${{ github.repository }}
             untagged_only: true
             owner_type: user

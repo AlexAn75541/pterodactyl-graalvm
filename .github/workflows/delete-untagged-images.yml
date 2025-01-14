@@ -15,5 +15,5 @@ jobs:
       - name: Delete untagged Docker images
         uses: actions/delete-package-versions@v5
         with:
-          github-token: ${{ secrets.PAT_TOKEN }} #${{ secrets.GITHUB_TOKEN }}
+            token: ${{ secrets.PAT_TOKEN }} #${{ secrets.GITHUB_TOKEN }}
 

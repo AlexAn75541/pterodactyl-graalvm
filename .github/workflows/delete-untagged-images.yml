@@ -1,9 +1,8 @@
-name: Delete Untagged Docker Images
+name: Delete Untagged Docker Images from GHCR
 
 on:
-  push:
-    branches:
-      - dev # or specify the branch you want to monitor
+  schedule:
+    - cron: '*/1 * * * *' # Runs every minute
   workflow_dispatch:
 
 jobs:
@@ -14,7 +13,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Delete untagged Docker images
-        uses: camargo/delete-untagged-action@v1
+        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository_owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          untagged_only: true
+          owner_type: user # or org
 

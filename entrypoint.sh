@@ -33,9 +33,14 @@ export INTERNAL_IP
 # Switch to the container's working directory
 cd /home/container || exit 1
 
+# Some color shit
+
+LIGHT_BLUE='\033[1;34m'
+GREEN='\033[0;32m'
+RESET_COLOR='\033[0m'
+
 # Print Java version
-printf "\033[1m\033[33mcontainer@pterodactylfromaretzera~ \033[0mjava -version\n"
-java -version
+printf "${LIGHT_BLUE}container@java-info~ ${RESET_COLOR}java -version\n"
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
@@ -44,6 +49,6 @@ PARSED=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g' | eval echo "$(cat
 
 # Display the command we're running in the output, and then execute it with the env
 # from the container itself.
-printf "\033[1m\033[33mcontainer@pterodactylfromaretzera~ \033[0m%s\n" "$PARSED"
+printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}%s\n" "$PARSED"
 # shellcheck disable=SC2086
 eval ${PARSED}

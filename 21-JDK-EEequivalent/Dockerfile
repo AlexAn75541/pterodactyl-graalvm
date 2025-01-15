@@ -23,7 +23,7 @@ RUN apt-get update -y \
          "linux/amd64")  ARCH=x64  ;; \
          "linux/arm64")  ARCH=aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz \
+  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_${ARCH}_bin.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \
   && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \

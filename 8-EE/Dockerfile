@@ -4,7 +4,7 @@
 # Environment: Java
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ARG TARGETPLATFORM
 ARG JAVA_VERSION=8
 LABEL       author="Aretzera" maintainer="agroup168@gmail.com"
@@ -15,10 +15,6 @@ RUN apt-get update -y \
   && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata locales iproute2 \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
-  && case ${TARGETPLATFORM} in \
-         "linux/amd64")  ARCH=x64  ;; \
-         "linux/arm64")  ARCH=aarch64  ;; \
-    esac \
   && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/AlexAn75541/jdks/releases/download/new/graalvm-ee-java8-linux-amd64-21.3.12.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \

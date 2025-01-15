@@ -4,7 +4,7 @@
 # Environment: Java
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ARG TARGETPLATFORM
 ARG GRAAL_VERSION=23.0.1
 ARG JAVA_VERSION=23

@@ -13,7 +13,7 @@ ___
 
 | Java | Standard JVM                           	  | JDK Community Edition                              | JDK Enterprise Edition                                     |
 |------|---------------------------------------------|--------------------------------------------------- |------------------------------------------------ |
-| 8    | ❌                                          | ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:8-EE` |
+| 8*** | ❌                                          | ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:8-EE` |
 | 11   | `ghcr.io/alexan75541/pterodactyl-graalvm:11`| ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:11-EE` |
 | 17   | `ghcr.io/alexan75541/pterodactyl-graalvm:17`| `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` |
 | 19   | `ghcr.io/alexan75541/pterodactyl-graalvm:19`| ❌                                          	    | ❌                                         	  |
@@ -38,6 +38,8 @@ ___
 *JDKs mainly pulled from GraalVM's Website and Oracle's JDK Archive 
 
 **JDK+23 currently not support `-Dgraal.OptWriteMotion=true/false` options
+
+***JDK_EE 8 does not support aarch64
 
 # Btw I will Update 22 and 20 additional configs soon :>
 ___

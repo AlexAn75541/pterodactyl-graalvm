@@ -20,8 +20,8 @@ RUN apt-get update -y \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
-         "linux/amd64")  ARCH=x64  ;; \
-         "linux/arm64")  ARCH=aarch64  ;; \
+         "linux/amd64")  ARCH=linux-x64  ;; \
+         "linux/arm64")  ARCH=linux-aarch64  ;; \
     esac \
   && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_${ARCH}_bin.tar.gz \
   && mkdir -p /opt/java/graalvm \

@@ -7,20 +7,20 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  delete-packages:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Delete untagged Docker images
-        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          repository_owner: ${{ github.repository_owner }}
-          repository: ${{ github.repository }}
-          untagged_only: false
-          owner_type: user 
+  #delete-packages:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout repository
+  #      uses: actions/checkout@v2
+  #
+  #    - name: Delete untagged Docker images
+  #      uses: Chizkiyahu/delete-untagged-ghcr-action@v6
+  #      with:
+  #        token: ${{ secrets.PAT_TOKEN }}
+  #        repository_owner: ${{ github.repository_owner }}
+  #        repository: ${{ github.repository }}
+  #        untagged_only: false
+  #        owner_type: user 
   pterodactyl-graalvm:
     name: "pterodactyl-graalvm:${{ matrix.tag }}"
     runs-on: ubuntu-latest
@@ -28,20 +28,21 @@ jobs:
       fail-fast: false
       matrix:
         tag:
-          - 8-EE
-          - 11
-          - 17
-          - 19
-          - 17-JDK
-          - 17-JDK-EEequivalent
-          - 20-JDK
-          - 21-JDK
-          - 21-JDK-EEequivalent
-          - 22-JDK
-          - 11-EE
-          - 17-EE
-          - 23
-          - 23-JDK-EEequivalent
+         # - 8-EE
+         # - 11
+         # - 17
+         # - 19
+         # - 17-JDK
+         # - 17-JDK-EEequivalent
+         # - 20-JDK
+         # - 21-JDK
+         # - 21-JDK-EEequivalent
+         # - 22-JDK
+         # - 11-EE
+         # - 17-EE
+         # - 23
+         # - 23-JDK-EEequivalent
+          - experimental-21
     steps:
       - name: Checkout
         uses: actions/checkout@v3

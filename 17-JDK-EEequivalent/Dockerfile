@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
-    FROM ubuntu:22.04
+    FROM ubuntu:24.04
 
     ARG TARGETPLATFORM
     ARG JAVA_VERSION=17
@@ -23,7 +23,7 @@
              "linux/amd64")  ARCH=x64  ;; \
              "linux/arm64")  ARCH=aarch64  ;; \
         esac \
-      && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/AlexAn75541/jdks/releases/download/new/graalvm-jdk-17.0.13_linux-x64_bin.tar.gz \
+      && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/AlexAn75541/jdks/releases/download/new/graalvm-jdk-17.0.13_${ARCH}_bin.tar.gz \
       && mkdir -p /opt/java/graalvm \
       && cd /opt/java/graalvm \
       && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \

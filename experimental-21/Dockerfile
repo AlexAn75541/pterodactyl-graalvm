@@ -10,10 +10,17 @@ FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
 FROM shipilev/openjdk:21 AS shenandoah
-FROM azul/zulu-openjdk:21 AS zulu
+FROM azul/zulu-openjdk:21 AS zulu-src
+FROM zulu-src AS zulu
+RUN cp -r /usr/lib/jvm/zulu-21-*/ /opt/zulu
+
 FROM amazoncorretto:21 AS corretto
 FROM ibm-semeru-runtimes:open-21-jdk AS semeru
-FROM bellsoft/liberica-openjdk-debian:21 AS liberica
+
+FROM bellsoft/liberica-openjdk-debian:21 AS liberica-src
+FROM liberica-src AS liberica
+RUN cp -r /usr/lib/jvm/*bellsoft*/ /opt/liberica
+
 FROM alibabadragonwell/dragonwell:21 AS dragonwell
 
 # base image
@@ -44,16 +51,11 @@ COPY --from=graalvm  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm
 COPY --from=graalvm-ce  /usr/lib64/graalvm/graalvm-community-java21  /opt/java/graalvm-ce
 COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm-native
 COPY --from=shenandoah  /opt/jdk/lib  /opt/java/shenandoah
-COPY --from=zulu  /usr/lib/jvm  /tmp/zulu
+COPY --from=zulu  /opt/zulu  /opt/java/zulu
 COPY --from=corretto  /usr/lib/jvm/java-21-amazon-corretto  /opt/java/corretto
 COPY --from=semeru  /opt/java/openjdk  /opt/java/semeru
-COPY --from=liberica  /usr/lib/jvm  /tmp/liberica
+COPY --from=liberica  /opt/liberica  /opt/java/liberica
 COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
-
-# Move arch-specific JDKs to final location
-RUN mv /tmp/zulu/zulu-21-* /opt/java/zulu && \
-    mv /tmp/liberica/*bellsoft* /opt/java/liberica && \
-    rm -rf /tmp/zulu /tmp/liberica
 
 # Cleanup all JDKs - remove docs, sources, demos, and debug files
 RUN for jdk_dir in /opt/java/*; do \

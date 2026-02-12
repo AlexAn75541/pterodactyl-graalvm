@@ -11,7 +11,7 @@ FROM eclipse-temurin:21-jdk AS temurin
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm
 
 # Stage 3 - Final image
-FROM ubuntu:latest
+FROM debian:latest
 
 LABEL       author="Aretzera" maintainer="agroup168@gmail.com"
 LABEL org.opencontainers.image.description="Experimental Image btw"
@@ -30,7 +30,7 @@ RUN         apt-get update -y \
 
 # Copy both JDKs from their respective stages
 COPY --from=temurin  /opt/java/openjdk   /opt/java/temurin
-COPY --from=graalvm  /usr/lib64/graalvm  /opt/java/graalvm
+COPY --from=graalvm  /usr/lib64/graalvm/graal-community-java21  /opt/java/graalvm
 
 # JVM_RUNTIME: "graalvm" (default) or "temurin" — switchable at runtime
 ENV JVM_RUNTIME=graalvm

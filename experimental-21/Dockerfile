@@ -61,10 +61,15 @@ RUN find /tmp/zulu-jvm -maxdepth 1 -type d -name "zulu-21-*" -exec mv {} /opt/ja
 RUN for jdk_dir in /opt/java/*; do \
         if [ -d "$jdk_dir" ]; then \
             cd "$jdk_dir" && \
-            rm -rf man/ demo/ sample/ src.zip lib/src.zip legal/ jmods/ include/ 2>/dev/null || true && \
-            find . -type f \( -name "*.debuginfo" -o -name "*.diz" \) -delete 2>/dev/null || true; \
+            rm -rf man/ demo/ sample/ src.zip lib/src.zip legal/ jmods/ include/ \
+                   release welcome.html readme.txt README ASSEMBLY_EXCEPTION LICENSE THIRD_PARTY_README \
+                   lib/static lib/*.a lib/*.lib 2>/dev/null || true && \
+            find . -type f \( -name "*.debuginfo" -o -name "*.diz" -o -name "*.pdb" -o -name "*.map" \) -delete 2>/dev/null || true; \
         fi; \
-    done
+    done && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/* /usr/share/man/* /usr/share/doc/*
 
 # JVM_RUNTIME is the arg to set the type of jdk to be launched, defaulted to temurin
 ENV JVM_RUNTIME=temurin

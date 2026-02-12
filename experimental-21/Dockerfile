@@ -12,19 +12,10 @@ FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
 FROM shipilev/openjdk:21 AS shenandoah
 
 
-FROM azul/zulu-openjdk:21 AS zulu-src
-FROM zulu-src AS zulu
-USER root
-RUN mkdir -p /opt/zulu && cp -r /usr/lib/jvm/zulu-21-*/* /opt/zulu/
-
+FROM azul/zulu-openjdk:21 AS zulu
 FROM amazoncorretto:21 AS corretto
 FROM ibm-semeru-runtimes:open-21-jdk AS semeru
-
-FROM bellsoft/liberica-openjdk-debian:21 AS liberica-src
-FROM liberica-src AS liberica
-USER root
-RUN mkdir -p /opt/liberica && cp -r /usr/lib/jvm/jdk-21-bellsoft-*/* /opt/liberica/
-
+FROM bellsoft/liberica-openjdk-debian:21 AS liberica
 FROM alibabadragonwell/dragonwell:21 AS dragonwell
 
 # base image
@@ -55,11 +46,16 @@ COPY --from=graalvm  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm
 COPY --from=graalvm-ce  /usr/lib64/graalvm/graalvm-community-java21  /opt/java/graalvm-ce
 COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm-native
 COPY --from=shenandoah  /opt/jdk/lib  /opt/java/shenandoah
-COPY --from=zulu  /opt/zulu  /opt/java/zulu
+COPY --from=zulu  /usr/lib/jvm  /tmp/zulu-jvm
 COPY --from=corretto  /usr/lib/jvm/java-21-amazon-corretto  /opt/java/corretto
 COPY --from=semeru  /opt/java/openjdk  /opt/java/semeru
-COPY --from=liberica  /opt/liberica  /opt/java/liberica
+COPY --from=liberica  /usr/lib/jvm  /tmp/liberica-jvm
 COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
+
+# Move arch-specific JDKs using find (no shell wildcards)
+RUN find /tmp/zulu-jvm -maxdepth 1 -type d -name "zulu-21-*" -exec mv {} /opt/java/zulu \; && \
+    find /tmp/liberica-jvm -maxdepth 1 -type d -name "*bellsoft*" -exec mv {} /opt/java/liberica \; && \
+    rm -rf /tmp/zulu-jvm /tmp/liberica-jvm
 
 # Cleanup all JDKs - remove docs, sources, demos, and debug files
 RUN for jdk_dir in /opt/java/*; do \

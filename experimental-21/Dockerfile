@@ -103,7 +103,9 @@ COPY --from=shenandoah  /opt/jdk/lib  /opt/java/shenandoah
 # ARCH: {foldername}-amd64 (x64) or {foldername}-aarch64 (arm64)
 RUN --mount=type=bind,from=zulu,source=/usr/lib/jvm,target=/tmp/zulu \
     ZULU_ARCH=$(case "${TARGETARCH}" in amd64) echo "amd64" ;; arm64) echo "aarch64" ;; *) echo "amd64" ;; esac) && \
-    cp -r /tmp/zulu/zulu-21-${ZULU_ARCH} /opt/java/zulu
+    ZULU_DIR=$(ls -d /tmp/zulu/zulu-21-* 2>/dev/null | grep -E "(amd64|aarch64|${ZULU_ARCH})" | head -1) && \
+    if [ -z "${ZULU_DIR}" ]; then ZULU_DIR=$(ls -d /tmp/zulu/zulu-21-* 2>/dev/null | head -1); fi && \
+    cp -r "${ZULU_DIR}" /opt/java/zulu
 
 
 COPY --from=corretto  /usr/lib/jvm/java-21-amazon-corretto  /opt/java/corretto
@@ -113,7 +115,9 @@ COPY --from=semeru  /opt/java/openjdk  /opt/java/semeru
 # ARCH: {foldername}-x86_64 (x64) or {foldername}-aarch64 (arm64), ts is so tuff
 RUN --mount=type=bind,from=liberica,source=/usr/lib/jvm,target=/tmp/liberica \
     LIBERICA_ARCH=$(case "${TARGETARCH}" in amd64) echo "x86_64" ;; arm64) echo "aarch64" ;; *) echo "x86_64" ;; esac) && \
-    cp -r /tmp/liberica/*bellsoft-${LIBERICA_ARCH} /opt/java/liberica
+    LIBERICA_DIR=$(ls -d /tmp/liberica/*bellsoft* 2>/dev/null | grep -E "(x86_64|aarch64|${LIBERICA_ARCH})" | head -1) && \
+    if [ -z "${LIBERICA_DIR}" ]; then LIBERICA_DIR=$(ls -d /tmp/liberica/*bellsoft* 2>/dev/null | head -1); fi && \
+    cp -r "${LIBERICA_DIR}" /opt/java/liberica
 
 COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
 

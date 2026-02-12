@@ -54,7 +54,6 @@ FROM alibabadragonwell/dragonwell:21 AS dragonwell
 RUN cd /opt/java/openjdk && \
     rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
-    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true
 
 # base image
 FROM debian:stable-slim

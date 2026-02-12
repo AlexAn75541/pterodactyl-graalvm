@@ -12,14 +12,14 @@ FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
 FROM shipilev/openjdk:21 AS shenandoah
 FROM azul/zulu-openjdk:21 AS zulu-src
 FROM zulu-src AS zulu
-RUN cp -r /usr/lib/jvm/zulu-21-*/ /opt/zulu
+RUN cp -r "$JAVA_HOME" /opt/zulu
 
 FROM amazoncorretto:21 AS corretto
 FROM ibm-semeru-runtimes:open-21-jdk AS semeru
 
 FROM bellsoft/liberica-openjdk-debian:21 AS liberica-src
 FROM liberica-src AS liberica
-RUN cp -r /usr/lib/jvm/*bellsoft*/ /opt/liberica
+RUN cp -r "$JAVA_HOME" /opt/liberica
 
 FROM alibabadragonwell/dragonwell:21 AS dragonwell
 

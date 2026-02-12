@@ -80,12 +80,12 @@
         },
         {
             "name": "JVM Runtime",
-            "description": "The JDK to use for running the server.\r\n\r\nOptions: `graalvm`, `temurin`, `graalvm-native`, `graalvm-ce`",
+            "description": "The JDK to use for running the server.\r\n\r\nOptions: `temurin`, `graalvm`, `graalvm-native`, `graalvm-ce`, `zulu`, `liberica`, `corretto`, `semeru`, `shenandoah`, `dragonwell`",
             "env_variable": "JVM_RUNTIME",
-            "default_value": "graalvm",
+            "default_value": "temurin",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|in:graalvm,temurin,graalvm-native,graalvm-ce",
+            "rules": "required|string|in:temurin,graalvm,graalvm-native,graalvm-ce,zulu,liberica,corretto,semeru,shenandoah,dragonwell",
             "field_type": "text"
         }
     ]

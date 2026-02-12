@@ -4,44 +4,71 @@
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
 
-# get JDK source, woah thats alot of stuff
+# get JDK source, woah thats alot of stuff, 
 FROM eclipse-temurin:21-jdk AS temurin
-RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ src.zip legal/ jmods/ 2>/dev/null || true && \
+    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true
 
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
-RUN cd /usr/lib64/graalvm/graalvm-java21 && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /usr/lib64/graalvm && \
+    GRAALVM_DIR=$(ls -d graalvm-* 2>/dev/null | head -1) && \
+    if [ -n "${GRAALVM_DIR}" ]; then \
+        cd "${GRAALVM_DIR}" && \
+        rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+        find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true; \
+    fi
 
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
-RUN cd /usr/lib64/graalvm/graalvm-community-java21 && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /usr/lib64/graalvm 2>/dev/null || cd /opt/graalvm-ce* 2>/dev/null || cd /usr/local/graalvm* 2>/dev/null || exit 0 && \
+    GRAALVM_DIR=$(ls -d graalvm-* 2>/dev/null | head -1) && \
+    if [ -n "${GRAALVM_DIR}" ]; then \
+        cd "${GRAALVM_DIR}" && \
+        rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+        find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true; \
+    fi
 
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
-RUN cd /usr/lib64/graalvm/graalvm-java21 && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /usr/lib64/graalvm && \
+    GRAALVM_DIR=$(ls -d graalvm-* 2>/dev/null | head -1) && \
+    if [ -n "${GRAALVM_DIR}" ]; then \
+        cd "${GRAALVM_DIR}" && \
+        rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+        find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true; \
+    fi
 
 FROM shipilev/openjdk:21 AS shenandoah
-RUN cd /opt/jdk && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /opt/jdk && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true
 
 FROM azul/zulu-openjdk:21 AS zulu
 RUN cd /usr/lib/jvm && \
     ZULU_DIR=$(ls -d zulu-21-* 2>/dev/null | head -1) && \
-    cd "${ZULU_DIR}" && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+    if [ -n "${ZULU_DIR}" ]; then \
+        cd "${ZULU_DIR}" && \
+        rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+        find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true; \
+    fi
 
 FROM amazoncorretto:21 AS corretto
-RUN cd /usr/lib/jvm/java-21-amazon-corretto && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /usr/lib/jvm/java-21-amazon-corretto && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true
 
 FROM ibm-semeru-runtimes:open-21-jdk AS semeru
-RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true
 
 FROM bellsoft/liberica-openjdk-debian:21 AS liberica
 RUN cd /usr/lib/jvm && \
     LIBERICA_DIR=$(ls -d *bellsoft* 2>/dev/null | head -1) && \
-    cd "${LIBERICA_DIR}" && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+    if [ -n "${LIBERICA_DIR}" ]; then \
+        cd "${LIBERICA_DIR}" && \
+        rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+        find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true; \
+    fi
 
 FROM alibabadragonwell/dragonwell:21 AS dragonwell
-RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
+RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ 2>/dev/null || true && \
+    find . -name "*.debuginfo" -delete -o -name "*.diz" -delete 2>/dev/null || true
 
 # base image
 FROM debian:stable-slim

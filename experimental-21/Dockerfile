@@ -11,17 +11,17 @@ RUN cd /opt/java/openjdk && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
-RUN cd /usr/lib64/graalvm/graalvm-* && \
+RUN cd /usr/lib64/graalvm && cd graalvm-* && \
     rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
-RUN cd /usr/lib64/graalvm/graalvm-* && \
+RUN cd /usr/lib64/graalvm && cd graalvm-* && \
     rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
-RUN cd /usr/lib64/graalvm/graalvm-* && \
+RUN cd /usr/lib64/graalvm && cd graalvm-* && \
     rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
@@ -31,7 +31,7 @@ RUN cd /opt/jdk && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
 FROM azul/zulu-openjdk:21 AS zulu
-RUN cd /usr/lib/jvm/zulu-21-* && \
+RUN cd /usr/lib/jvm && cd zulu-21-* && \
     rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
@@ -46,7 +46,7 @@ RUN cd /opt/java/openjdk && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 
 FROM bellsoft/liberica-openjdk-debian:21 AS liberica
-RUN cd /usr/lib/jvm/*bellsoft* && \
+RUN cd /usr/lib/jvm && cd *bellsoft* && \
     rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
     find . -name "*.debuginfo" -o -name "*.diz" -delete
 

@@ -4,56 +4,17 @@
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
 
-# get JDK source, woah thats alot of stuff, 
+# get JDK source, woah thats alot of stuff
 FROM eclipse-temurin:21-jdk AS temurin
-RUN cd /opt/java/openjdk && \
-    rm -rf man/ demo/ sample/ src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
-RUN cd /usr/lib64/graalvm && cd graalvm-* && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
-RUN cd /usr/lib64/graalvm && cd graalvm-* && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
-RUN cd /usr/lib64/graalvm && cd graalvm-* && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM shipilev/openjdk:21 AS shenandoah
-RUN cd /opt/jdk && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM azul/zulu-openjdk:21 AS zulu
-RUN cd /usr/lib/jvm && cd zulu-21-* && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM amazoncorretto:21 AS corretto
-RUN cd /usr/lib/jvm/java-21-amazon-corretto && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM ibm-semeru-runtimes:open-21-jdk AS semeru
-RUN cd /opt/java/openjdk && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM bellsoft/liberica-openjdk-debian:21 AS liberica
-RUN cd /usr/lib/jvm && cd *bellsoft* && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
-
 FROM alibabadragonwell/dragonwell:21 AS dragonwell
-RUN cd /opt/java/openjdk && \
-    rm -rf man/ demo/ sample/ lib/src.zip legal/ jmods/ && \
-    find . -name "*.debuginfo" -o -name "*.diz" -delete
 
 # base image
 FROM debian:stable-slim
@@ -97,6 +58,14 @@ RUN --mount=type=bind,from=liberica,source=/usr/lib/jvm,target=/tmp/liberica \
 
 COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
 
+# Cleanup all JDKs - remove docs, sources, demos, and debug files
+RUN for jdk_dir in /opt/java/*; do \
+        if [ -d "$jdk_dir" ]; then \
+            cd "$jdk_dir" && \
+            rm -rf man/ demo/ sample/ src.zip lib/src.zip legal/ jmods/ include/ 2>/dev/null || true && \
+            find . -type f \( -name "*.debuginfo" -o -name "*.diz" \) -delete 2>/dev/null || true; \
+        fi; \
+    done
 
 # JVM_RUNTIME is the arg to set the type of jdk to be launched, defaulted to temurin
 ENV JVM_RUNTIME=temurin

@@ -5,8 +5,8 @@
         "update_url": null
     },
     "exported_at": "2026-01-05T18:02:31+00:00",
-    "name": "Paper",
-    "author": "parker@pterodactyl.io",
+    "name": "Paper with Experimental Java 21 Support",
+    "author": "agroup168@proton.me",
     "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
     "features": [
         "eula",
@@ -80,12 +80,12 @@
         },
         {
             "name": "JVM Runtime",
-            "description": "The JDK to use for running the server.\r\n\r\nOptions: `graalvm`, `temurin`",
+            "description": "The JDK to use for running the server.\r\n\r\nOptions: `graalvm`, `temurin`, `graalvm-native`, `graalvm-ce`",
             "env_variable": "JVM_RUNTIME",
             "default_value": "graalvm",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|in:graalvm,temurin",
+            "rules": "required|string|in:graalvm,temurin,graalvm-native,graalvm-ce",
             "field_type": "text"
         }
     ]

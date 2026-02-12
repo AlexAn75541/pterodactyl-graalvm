@@ -30,7 +30,7 @@ RUN         apt-get update -y \
 
 # Copy both JDKs from their respective stages
 COPY --from=temurin  /opt/java/openjdk   /opt/java/temurin
-COPY --from=graalvm  /usr/lib64/graalvm/graal-community-java21  /opt/java/graalvm
+COPY --from=graalvm  /usr/lib64/graalvm/graalvm-community-java21  /opt/java/graalvm
 
 # JVM_RUNTIME: "graalvm" (default) or "temurin" — switchable at runtime
 ENV JVM_RUNTIME=graalvm

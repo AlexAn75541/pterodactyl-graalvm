@@ -47,6 +47,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       
+      - name: Free Disk Space
+        run: |
+          docker system prune -af --volumes
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY"
+          df -h
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         

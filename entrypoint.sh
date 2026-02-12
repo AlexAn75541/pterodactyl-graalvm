@@ -30,6 +30,11 @@ export TZ
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
+# Set JAVA_HOME based on JVM_RUNTIME (default: graalvm)
+JVM_RUNTIME=${JVM_RUNTIME:-graalvm}
+export JAVA_HOME="/opt/java/${JVM_RUNTIME}"
+export PATH="${JAVA_HOME}/bin:${PATH}"
+
 # Switch to the container's working directory
 cd /home/container || exit 1
 

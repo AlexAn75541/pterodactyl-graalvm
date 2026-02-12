@@ -14,6 +14,7 @@ FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm
 FROM ubuntu:latest
 
 LABEL       author="Aretzera" maintainer="agroup168@gmail.com"
+LABEL org.opencontainers.image.description="Experimental Image btw"
 
 ENV DEBIAN_FRONTEND=noninteractive
 

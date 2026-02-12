@@ -46,6 +46,8 @@ RESET_COLOR='\033[0m'
 
 # Print Java version
 printf "${LIGHT_BLUE}container@java-info~ ${RESET_COLOR}java -version\n"
+java -version 2>&1 | cat
+echo ""
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically

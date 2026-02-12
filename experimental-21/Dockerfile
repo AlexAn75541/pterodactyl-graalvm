@@ -23,10 +23,12 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN         apt-get update -y \
             && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales \
+            && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+            && locale-gen en_US.UTF-8 \
+            && update-locale LANG=en_US.UTF-8 \
             && apt-get clean \
             && rm -rf /var/lib/apt/lists/* \
-            && useradd -m -d /home/container container \
-            && locale-gen en_US.UTF-8
+            && useradd -m -d /home/container container
 
 # Copy both JDKs from their respective stages
 COPY --from=temurin  /opt/java/openjdk   /opt/java/temurin

@@ -4,7 +4,7 @@
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
 
-# get JDK source
+# get JDK source, woah thats alot of stuff
 FROM eclipse-temurin:21-jdk AS temurin
 RUN cd /opt/java/openjdk && rm -rf man/ demo/ sample/ src.zip legal/ jmods/ && find . -name "*.debuginfo" -delete -o -name "*.diz" -delete
 
@@ -49,7 +49,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN         apt-get update -y \
-            && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales \
+            && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 python3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales libnuma1 numactl \
             && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
             && locale-gen en_US.UTF-8 \
             && update-locale LANG=en_US.UTF-8 \

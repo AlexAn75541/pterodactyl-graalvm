@@ -80,7 +80,7 @@
         },
         {
             "name": "JVM Runtime",
-            "description": "The JVM runtime to use for running the server.\r\n\r\nOptions: graalvm (default, optimized performance) or temurin (standard OpenJDK).",
+            "description": "The JDK to use for running the server.\r\n\r\nOptions: `graalvm`, `temurin`",
             "env_variable": "JVM_RUNTIME",
             "default_value": "graalvm",
             "user_viewable": true,

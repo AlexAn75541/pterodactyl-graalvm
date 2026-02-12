@@ -7,7 +7,7 @@
 # get JDK source
 FROM eclipse-temurin:21-jdk AS temurin
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
-FROM ghcr.io/graalvm/graalvm-community:21-jdk AS graalvm-ce
+FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
 
 # base image

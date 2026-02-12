@@ -44,19 +44,16 @@ COPY --from=graalvm  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm
 COPY --from=graalvm-ce  /usr/lib64/graalvm/graalvm-community-java21  /opt/java/graalvm-ce
 COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm-native
 COPY --from=shenandoah  /opt/jdk/lib  /opt/java/shenandoah
-
-
-# Copy arch-specific JDKs (auto-detects correct folder)
-RUN --mount=type=bind,from=zulu,source=/usr/lib/jvm,target=/tmp/zulu \
-    cp -r /tmp/zulu/zulu-21-* /opt/java/zulu
-
+COPY --from=zulu  /usr/lib/jvm  /tmp/zulu
 COPY --from=corretto  /usr/lib/jvm/java-21-amazon-corretto  /opt/java/corretto
 COPY --from=semeru  /opt/java/openjdk  /opt/java/semeru
-
-RUN --mount=type=bind,from=liberica,source=/usr/lib/jvm,target=/tmp/liberica \
-    cp -r /tmp/liberica/*bellsoft* /opt/java/liberica
-
+COPY --from=liberica  /usr/lib/jvm  /tmp/liberica
 COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
+
+# Move arch-specific JDKs to final location
+RUN mv /tmp/zulu/zulu-21-* /opt/java/zulu && \
+    mv /tmp/liberica/*bellsoft* /opt/java/liberica && \
+    rm -rf /tmp/zulu /tmp/liberica
 
 # Cleanup all JDKs - remove docs, sources, demos, and debug files
 RUN for jdk_dir in /opt/java/*; do \

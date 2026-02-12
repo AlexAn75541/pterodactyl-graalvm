@@ -42,34 +42,42 @@ RUN         apt-get update -y \
 
 # Copy both JDKs, i downloaded them all and check them in Docker Desktop
 COPY --from=temurin  /opt/java/openjdk   /opt/java/temurin
+RUN rm -rf /opt/java/temurin/man /opt/java/temurin/demo /opt/java/temurin/sample \
+           /opt/java/temurin/src.zip /opt/java/temurin/lib/src.zip /opt/java/temurin/legal \
+           /opt/java/temurin/jmods /opt/java/temurin/include
+
 COPY --from=graalvm  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm
+RUN rm -rf /opt/java/graalvm/man /opt/java/graalvm/legal /opt/java/graalvm/lib/src.zip
+
 COPY --from=graalvm-ce  /usr/lib64/graalvm/graalvm-community-java21  /opt/java/graalvm-ce
+RUN rm -rf /opt/java/graalvm-ce/man /opt/java/graalvm-ce/legal /opt/java/graalvm-ce/lib/src.zip
+
 COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm-native
+RUN rm -rf /opt/java/graalvm-native/man /opt/java/graalvm-native/legal /opt/java/graalvm-native/lib/src.zip
+
 COPY --from=shenandoah  /opt/jdk/lib  /opt/java/shenandoah
+RUN rm -rf /opt/java/shenandoah/src.zip
+
 COPY --from=zulu  /usr/lib/jvm  /tmp/zulu-jvm
-COPY --from=corretto  /usr/lib/jvm/java-21-amazon-corretto  /opt/java/corretto
-COPY --from=semeru  /opt/java/openjdk  /opt/java/semeru
-COPY --from=liberica  /usr/lib/jvm  /tmp/liberica-jvm
-COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
-
-# Move arch-specific JDKs using find (no shell wildcards)
 RUN find /tmp/zulu-jvm -maxdepth 1 -type d -name "zulu-21-*" -exec mv {} /opt/java/zulu \; && \
-    find /tmp/liberica-jvm -maxdepth 1 -type d -name "*bellsoft*" -exec mv {} /opt/java/liberica \; && \
-    rm -rf /tmp/zulu-jvm /tmp/liberica-jvm
+    rm -rf /tmp/zulu-jvm /opt/java/zulu/man /opt/java/zulu/demo /opt/java/zulu/sample
 
-# Cleanup all JDKs - remove docs, sources, demos, and debug files
-RUN for jdk_dir in /opt/java/*; do \
-        if [ -d "$jdk_dir" ]; then \
-            cd "$jdk_dir" && \
-            rm -rf man/ demo/ sample/ src.zip lib/src.zip legal/ jmods/ include/ \
-                   release welcome.html readme.txt README ASSEMBLY_EXCEPTION LICENSE THIRD_PARTY_README \
-                   lib/static lib/*.a lib/*.lib 2>/dev/null || true && \
-            find . -type f \( -name "*.debuginfo" -o -name "*.diz" -o -name "*.pdb" -o -name "*.map" \) -delete 2>/dev/null || true; \
-        fi; \
-    done && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/* /usr/share/man/* /usr/share/doc/*
+COPY --from=corretto  /usr/lib/jvm/java-21-amazon-corretto  /opt/java/corretto
+RUN rm -rf /opt/java/corretto/man /opt/java/corretto/legal /opt/java/corretto/lib/src.zip
+
+COPY --from=semeru  /opt/java/openjdk  /opt/java/semeru
+RUN rm -rf /opt/java/semeru/man /opt/java/semeru/demo /opt/java/semeru/sample /opt/java/semeru/legal
+
+COPY --from=liberica  /usr/lib/jvm  /tmp/liberica-jvm
+RUN find /tmp/liberica-jvm -maxdepth 1 -type d -name "*bellsoft*" -exec mv {} /opt/java/liberica \; && \
+    rm -rf /tmp/liberica-jvm /opt/java/liberica/man /opt/java/liberica/legal
+
+COPY --from=dragonwell  /opt/java/openjdk  /opt/java/dragonwell
+RUN rm -rf /opt/java/dragonwell/man /opt/java/dragonwell/demo /opt/java/dragonwell/sample /opt/java/dragonwell/legal
+
+# Final cleanup - remove any remaining cruft
+RUN find /opt/java -type f \( -name "*.debuginfo" -o -name "*.diz" \) -delete && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # JVM_RUNTIME is the arg to set the type of jdk to be launched, defaulted to temurin
 ENV JVM_RUNTIME=temurin

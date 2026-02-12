@@ -6,7 +6,7 @@
 
 # get JDK source
 FROM eclipse-temurin:21-jdk AS temurin
-FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm
+FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
 
 # base image
 FROM debian:latest
@@ -30,7 +30,7 @@ RUN         apt-get update -y \
 
 # Copy both JDKs, i downloaded them all and check them in Docker Desktop
 COPY --from=temurin  /opt/java/openjdk   /opt/java/temurin
-COPY --from=graalvm  /usr/lib64/graalvm/graalvm-community-java21  /opt/java/graalvm
+COPY --from=graalvm  /usr/lib64/graalvm/graalvm-java21  /opt/java/graalvm
 
 # JVM_RUNTIME is the arg to set the type of jdk to be launched, defaulted to graalvm
 ENV JVM_RUNTIME=graalvm

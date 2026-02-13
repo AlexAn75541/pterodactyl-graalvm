@@ -30,6 +30,22 @@ export TZ
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
+# Set JAVA_HOME based on JVM_RUNTIME (default: temurin)
+JVM_RUNTIME=${JVM_RUNTIME:-temurin}
+export JAVA_HOME="/opt/java/${JVM_RUNTIME}"
+
+# Check if the selected JVM runtime exists
+if [ ! -d "${JAVA_HOME}" ]; then
+    echo "ERROR: JVM runtime '${JVM_RUNTIME}' is not available in this image."
+    echo "Available runtimes:"
+    ls -1 /opt/java/ 2>/dev/null || echo "  (none found)"
+    echo ""
+    echo "Please set JVM_RUNTIME to one of the available options."
+    exit 1
+fi
+
+export PATH="${JAVA_HOME}/bin:${PATH}"
+
 # Switch to the container's working directory
 cd /home/container || exit 1
 
@@ -41,6 +57,8 @@ RESET_COLOR='\033[0m'
 
 # Print Java version
 printf "${LIGHT_BLUE}container@java-info~ ${RESET_COLOR}java -version\n"
+java -version 2>&1 | cat
+echo ""
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically

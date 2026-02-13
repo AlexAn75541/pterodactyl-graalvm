@@ -12,13 +12,13 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 |--------------|-----------|---------------------|
 | **8** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-8` | Temurin, Zulu, Corretto, Semeru, Liberica, Dragonwell |
 | **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, Zulu, Corretto, Semeru, Liberica, Dragonwell |
-| **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
-| **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
-| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica _(possible limited vendor support)_ |
+| **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
+| **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
+| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica, **GraalVM (all 3 variants)**  |
+
+
 
 ## Main Features
-
-**Multi-Architecture Support:** linux/amd64 (x86_64) and linux/arm64 (aarch64)
 
 **Multiple JDK Vendors supported:**
 - **Temurin** - Eclipse Adoptium OpenJDK, standard and widely trusted
@@ -39,33 +39,56 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 - Removed docs, samples, demos
 - Single-layer final copy for efficient caching(post image building process)
 
-## How to Use In Pterodactyl Panel(or anywhere else)
+## How to Use
 
-**1. Set Docker Image in Pterodactyl Egg:**
-```json
-{
-  "docker_image": "ghcr.io/alexan75541/pterodactyl-graalvm:aio-{YOUR DESIRED VERSION}"
-}
-```
 
-**2. Add function to switch JDK Vendors for users:**
+### Add the `JDK_VENDOR` environment variable in Pterodactyl Panel:
 
 > [!NOTE]
 > Without this variable, the image will default on Temurin's JDK for the best compatibility as possible.
 > If you want to use this image without the Panel, besure to set the `JDK_VENDOR` as an environment variable(obviously).
 > For example: `docker run -e JDK_VENDOR=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`.
 
-Add the `JDK_VENDOR` environment variable in Pterodactyl Panel:
-- Go to your server → Startup
-- Add/edit the `JDK_VENDOR` variable
-- Set value: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell`
-- Stop THEN start the server
+- Go to Pterodactyl Admin Panel → Minecraft Nest → {Any Egg you wish to edit}
+- Go to Variables -> Create New Variable
+- Enter your name and description of choice
+- Add the `JDK_VENDOR` to the Environment Variable box
+- You can use any Input value in this list: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell` → as long as the rule are `required|string|max:20`
+- Go on click Create Variable
+- Stop THEN start the server, or Reinstall if unsure
+
+Alternatively, you can use the `egg-paper.json` in my repo, or put this in your `{whatever egg that is}.json` :
+
+```
+{
+            "name": "JDK Vendor",
+            "description": "The JDK vendor to use for running the server.\r\n\r\nOptions: `temurin`, `graalvm`, `graalvm-native`, `graalvm-ce`, `zulu`, `liberica`, `corretto`, `semeru`, `shenandoah`, `dragonwell`",
+            "env_variable": "JDK_VENDOR",
+            "default_value": "temurin",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:temurin,graalvm,graalvm-native,graalvm-ce,zulu,liberica,corretto,semeru,shenandoah,dragonwell",
+            "field_type": "text"
+}
+
+```
+
+Along with the list of Java version if you want:
+
+```
+"docker_images": {
+        "Java 8": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-8",
+        "Java 11": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-11",
+        "Java 17": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-17",
+        "Java 21": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-21",
+        "Java 25": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-25"
+```
 
 ## License and Contributing
 
-MIT License - See LICENSE file
+**MIT License - See LICENSE file**
 
-By using Oracle's registry in this repository, I, Aretzera(AlexAn75541), comply to [GraalVM Free Terms and Conditions (GFTC)](https://www.oracle.com/downloads/licenses/graal-free-license.html).
+By using Oracle's registry in this repository, I, Aretzera(AlexAn75541) or maybe users of this repository, comply to [GraalVM Free Terms and Conditions (GFTC)](https://www.oracle.com/downloads/licenses/graal-free-license.html).
 
 Moreover, this project includes the following JDK distributions:
 - **Eclipse Temurin**: GPLv2 
@@ -79,11 +102,11 @@ All JDK distributions are used in accordance with their respective licenses.
 ### Issues and PRs welcome! This repo is maintained for personal use but shared with the community(if they care lol).
 
 **Credits:**
-- GraalVM: https://www.graalvm.org/
+
 - Pterodactyl Panel: https://pterodactyl.io/
 - [RikoDEV's GraalVM Pterodactyl Docker Image Repo](https://github.com/RikoDEV/pterodactyl-graalvm)
 - [THE OG YOLK](https://github.com/pterodactyl/yolks)
 - [trenutoo's Pterodactyl Docker Image Repo](https://github.com/trenutoo/pterodactyl-images/)
-- All JDK vendors for their amazing work so far and I hope that I won't get killed by them
+- And all JDK vendors for their amazing work so far and I hope that I won't get killed by them
 
 

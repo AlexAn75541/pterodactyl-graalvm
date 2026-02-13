@@ -94,20 +94,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_graalvm.outputs.tags }}
           labels: ${{ steps.meta_graalvm.outputs.labels }}
-
-  delete-packages:
-    needs: pterodactyl-aio-jdk
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Delete untagged Docker images
-        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository_owner: ${{ github.repository_owner }}
-          repository: pterodactyl-aio-jdk
-          untagged_only: true
-          owner_type: user

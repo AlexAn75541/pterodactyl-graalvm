@@ -1,10 +1,10 @@
 
 ![license mit](https://img.shields.io/badge/license-MIT-green) 
-[![build graalvm](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml)
+[![build status](https://github.com/AlexAn75541/pterodactyl-aio-jdk/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/AlexAn75541/pterodactyl-aio-jdk/actions/workflows/docker-image.yml)
 
 # Pterodactyl Multi-Vendor JDK Images
 
-Docker images for Pterodactyl Panel with multiple JDK vendors in a single container. Switch between vendors at runtime using the `JVM_RUNTIME` environment variable.
+Docker images for Pterodactyl Panel with multiple JDK vendors in a single container. Switch between vendors at runtime using the `JDK_VENDOR` environment variable.
 
 ## Available Images
 
@@ -14,7 +14,7 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 | **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, Zulu, Corretto, Semeru, Liberica, Dragonwell |
 | **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
 | **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
-| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica _(limited vendor support)_ |
+| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica _(possible limited vendor support)_ |
 
 ## Main Features
 
@@ -52,12 +52,12 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 
 > [!NOTE]
 > Without this variable, the image will default on Temurin's JDK for the best compatibility as possible.
-> If you want to use this image without the Panel, besure to set the `JVM_RUNTIME` as an environment variable(obviously).
-> For example: `docker run -e JVM_RUNTIME=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`.
+> If you want to use this image without the Panel, besure to set the `JDK_VENDOR` as an environment variable(obviously).
+> For example: `docker run -e JDK_VENDOR=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`.
 
-Add the `JVM_RUNTIME` environment variable in Pterodactyl Panel:
+Add the `JDK_VENDOR` environment variable in Pterodactyl Panel:
 - Go to your server → Startup
-- Add/edit the `JVM_RUNTIME` variable
+- Add/edit the `JDK_VENDOR` variable
 - Set value: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell`
 - Stop THEN start the server
 
@@ -65,7 +65,18 @@ Add the `JVM_RUNTIME` environment variable in Pterodactyl Panel:
 
 MIT License - See LICENSE file
 
-Issues and PRs welcome! This repo is maintained for personal use but shared with the community(if they care lol).
+By using Oracle's registry in this repository, I, Aretzera(AlexAn75541), comply to [GraalVM Free Terms and Conditions (GFTC)](https://www.oracle.com/downloads/licenses/graal-free-license.html).
+
+Moreover, this project includes the following JDK distributions:
+- **Eclipse Temurin**: GPLv2 
+- **Azul Zulu**: GPLv2   
+- **BellSoft Liberica**: GPLv2  
+- **GraalVM Community Edition**: GPLv2
+- *(And Other vendors...)*
+
+All JDK distributions are used in accordance with their respective licenses.
+
+### Issues and PRs welcome! This repo is maintained for personal use but shared with the community(if they care lol).
 
 **Credits:**
 - GraalVM: https://www.graalvm.org/

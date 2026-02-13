@@ -9,11 +9,17 @@
 FROM eclipse-temurin:25-jdk AS temurin
 FROM azul/zulu-openjdk:25 AS zulu
 FROM bellsoft/liberica-openjdk-debian:25 AS liberica
+FROM container-registry.oracle.com/graalvm/jdk:25 AS graalvm
+FROM ghcr.io/graalvm/jdk-community:25 AS graalvm-ce
+FROM container-registry.oracle.com/graalvm/native-image:25 AS graalvm-native
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
 
 # Copy all JDKs into the builder
+COPY --from=graalvm         /usr/lib64/graalvm/graalvm-java25              /opt/java/graalvm
+COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm-community-java25    /opt/java/graalvm-ce
+COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java25              /opt/java/graalvm
 COPY --from=temurin         /opt/java/openjdk                              /opt/java/temurin
 
 # Zulu and Liberica use variable directory names
@@ -86,7 +92,7 @@ RUN         apt-get update -y \
 # Copy all pre-stripped JDKs in a single layer
 COPY --from=jdk-builder /opt/java /opt/java
 
-ENV JVM_RUNTIME=temurin
+ENV JDK_VENDOR=temurin
 
 USER        container
 ENV         USER=container HOME=/home/container

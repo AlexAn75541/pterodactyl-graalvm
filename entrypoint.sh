@@ -30,17 +30,17 @@ export TZ
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
-# Set JAVA_HOME based on JVM_RUNTIME (default: temurin)
-JVM_RUNTIME=${JVM_RUNTIME:-temurin}
-export JAVA_HOME="/opt/java/${JVM_RUNTIME}"
+# Set JAVA_HOME based on JDK_VENDOR (default: temurin)
+JDK_VENDOR=${JDK_VENDOR:-temurin}
+export JAVA_HOME="/opt/java/${JDK_VENDOR}"
 
-# Check if the selected JVM runtime exists
+# Check if the selected JDK vendor exists
 if [ ! -d "${JAVA_HOME}" ]; then
-    echo "ERROR: JVM runtime '${JVM_RUNTIME}' is not available in this image."
-    echo "Available runtimes:"
+    echo "ERROR: JDK vendor '${JDK_VENDOR}' is not available in this image."
+    echo "Available vendors:"
     ls -1 /opt/java/ 2>/dev/null || echo "  (none found)"
     echo ""
-    echo "Please set JVM_RUNTIME to one of the available options."
+    echo "Please set JDK_VENDOR to one of the available options."
     exit 1
 fi
 

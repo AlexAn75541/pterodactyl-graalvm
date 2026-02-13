@@ -9,13 +9,16 @@ on:
 jobs:
   delete-packages:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Delete untagged Docker images
         uses: Chizkiyahu/delete-untagged-ghcr-action@v6
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository_owner: ${{ github.repository_owner }}
-          repository: ${{ github.repository }}
+          repository: pterodactyl-aio-jdk
           untagged_only: true
           owner_type: user
 

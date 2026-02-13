@@ -38,15 +38,39 @@ COPY --from=liberica  /usr/lib/jvm  /tmp/liberica-jvm
 # Keeps bin/ and lib/ intact (javac, jlink, jshell, jar, jfr, native-image, etc.)
 # Single RUN: move variable-named dirs, then strip ALL JDKs in one pass
 RUN set -eux && \
-    # Move Zulu (find any zulu-* directory)
-    ZULU_DIR=$(find /tmp/zulu-jvm -mindepth 1 -maxdepth 1 -type d -name "zulu-*" | head -n1) && \
-    if [ -n "$ZULU_DIR" ]; then mv "$ZULU_DIR" /opt/java/zulu; fi && \
+    # Debug: show what's actually inside the temp dirs
+    echo "=== Contents of /tmp/zulu-jvm ===" && ls -la /tmp/zulu-jvm/ && \
+    echo "=== Contents of /tmp/liberica-jvm ===" && ls -la /tmp/liberica-jvm/ && \
+    \
+    # Move Zulu — match any subdirectory containing "zulu" (case-insensitive)
+    ZULU_DIR=$(find /tmp/zulu-jvm -mindepth 1 -maxdepth 1 -type d | head -n1) && \
+    if [ -n "$ZULU_DIR" ]; then \
+        echo "Moving Zulu from: $ZULU_DIR" && \
+        mv "$ZULU_DIR" /opt/java/zulu; \
+    else \
+        echo "ERROR: No Zulu JDK directory found!" && exit 1; \
+    fi && \
     rm -rf /tmp/zulu-jvm && \
     \
-    # Move Liberica (find any *bellsoft* directory)
-    LIBERICA_DIR=$(find /tmp/liberica-jvm -mindepth 1 -maxdepth 1 -type d -name "*bellsoft*" | head -n1) && \
-    if [ -n "$LIBERICA_DIR" ]; then mv "$LIBERICA_DIR" /opt/java/liberica; fi && \
+    # Move Liberica — match any subdirectory
+    LIBERICA_DIR=$(find /tmp/liberica-jvm -mindepth 1 -maxdepth 1 -type d | head -n1) && \
+    if [ -n "$LIBERICA_DIR" ]; then \
+        echo "Moving Liberica from: $LIBERICA_DIR" && \
+        mv "$LIBERICA_DIR" /opt/java/liberica; \
+    else \
+        echo "ERROR: No Liberica JDK directory found!" && exit 1; \
+    fi && \
     rm -rf /tmp/liberica-jvm && \
+    \
+    # Verify every JDK has a bin/java
+    for jdk in temurin graalvm graalvm-ce graalvm-native shenandoah zulu corretto semeru liberica dragonwell; do \
+        if [ ! -f "/opt/java/$jdk/bin/java" ]; then \
+            echo "ERROR: /opt/java/$jdk/bin/java not found!" && \
+            ls -laR /opt/java/$jdk/ 2>/dev/null || echo "Directory missing entirely" && \
+            exit 1; \
+        fi; \
+        echo "OK /opt/java/$jdk/bin/java"; \
+    done && \
     \
     # Remove non-essential directories to save space (keeps bin/, lib/ with all dev tools)
     for dir in man demo sample legal jmods include; do \
@@ -63,7 +87,8 @@ RUN set -eux && \
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java
 
-
+    # too lazy to understand all ts
+    
 # ---- Final image ----
 FROM debian:stable-slim
 

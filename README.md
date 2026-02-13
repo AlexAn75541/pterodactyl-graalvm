@@ -2,7 +2,7 @@
 ![license mit](https://img.shields.io/badge/license-MIT-green) 
 [![build status](https://github.com/AlexAn75541/pterodactyl-aio-jdk/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/AlexAn75541/pterodactyl-aio-jdk/actions/workflows/docker-image.yml)
 
-# Pterodactyl Multi-Vendor JDK Images
+# Pterodactyl JDK Images with (almost) all of the Vendors
 
 Docker images for Pterodactyl Panel with multiple JDK vendors in a single container. Switch between vendors at runtime using the `JDK_VENDOR` environment variable.
 

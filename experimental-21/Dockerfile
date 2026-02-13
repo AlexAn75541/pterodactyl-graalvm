@@ -24,8 +24,8 @@ FROM debian:stable-slim AS jdk-builder
 # Copy all JDKs into the builder
 COPY --from=temurin         /opt/java/openjdk                              /opt/java/temurin
 COPY --from=graalvm         /usr/lib64/graalvm/graalvm-java21              /opt/java/graalvm
-COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm-community-java21   /opt/java/graalvm-ce
-COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21             /opt/java/graalvm-native
+COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm-community-java21    /opt/java/graalvm-ce
+COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21              /opt/java/graalvm-native
 COPY --from=shenandoah      /opt/jdk                                       /opt/java/shenandoah
 COPY --from=corretto        /usr/lib/jvm/java-21-amazon-corretto           /opt/java/corretto
 COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
@@ -38,18 +38,34 @@ COPY --from=liberica  /usr/lib/jvm  /tmp/liberica-jvm
 # Single RUN: move variable-named dirs, then strip ALL JDKs in one pass.
 # Keeps bin/ and lib/ intact (javac, jlink, jshell, jar, jfr, native-image, etc.)
 RUN set -eux && \
-    find /tmp/zulu-jvm -maxdepth 1 -type d -name "zulu-21-*" -exec mv {} /opt/java/zulu \; && \
+    # Move Zulu (variable name pattern)
+    find /tmp/zulu-jvm -mindepth 1 -maxdepth 1 -type d -name "zulu-*" -exec mv {} /opt/java/zulu \; && \
     rm -rf /tmp/zulu-jvm && \
-    find /tmp/liberica-jvm -maxdepth 1 -type d -name "*bellsoft*" -exec mv {} /opt/java/liberica \; && \
+
+    # Move Liberica (variable name pattern)
+    find /tmp/liberica-jvm -mindepth 1 -maxdepth 1 -type d -name "*bellsoft*" -exec mv {} /opt/java/liberica \; && \
     rm -rf /tmp/liberica-jvm && \
-    # Remove non-essential directories (man pages, demos, samples, legal notices, jmods)
-    find /opt/java -type d \( -name "man" -o -name "demo" -o -name "sample" -o -name "legal" -o -name "jmods" \) -exec rm -rf {} + 2>/dev/null || true && \
-    # Remove non-essential files (source bundles, debug symbols, source maps)
+
+    # Verify all JDK bin directories exist before cleanup
+    echo "=== Verifying JDK bin directories ===" && \
+    for jdk in temurin graalvm graalvm-ce graalvm-native shenandoah zulu corretto semeru liberica dragonwell; do \
+        if [ ! -d "/opt/java/$jdk/bin" ]; then \
+            echo "ERROR: /opt/java/$jdk/bin not found!" && \
+            ls -la /opt/java/$jdk/ || echo "JDK directory does not exist" && \
+            exit 1; \
+        fi; \
+        echo "✓ /opt/java/$jdk/bin exists"; \
+    done && \
+
+    # Remove non-essential directories using simple wildcard expansion (safer than complex find)
+    rm -rf /opt/java/*/man /opt/java/*/demo /opt/java/*/sample /opt/java/*/legal /opt/java/*/jmods /opt/java/*/include 2>/dev/null || true && \
+
+    # Remove non-essential files
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
-    # Strip debug symbols from shared libraries — saves ~30-40% on .so files
+
+    # Strip debug symbols from shared libraries — saves ~30-40% on .so files  
     find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    # Remove include headers (C/JNI headers — not needed at runtime or for Java development)
-    find /opt/java -maxdepth 2 -type d -name "include" -exec rm -rf {} + 2>/dev/null || true && \
+    
     # Log final sizes for CI debugging
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java

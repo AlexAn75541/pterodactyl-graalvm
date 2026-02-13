@@ -77,15 +77,15 @@
             "field_type": "text"
         },
         {
-            "name": "JVM Runtime",
-            "description": "The JDK to use for running the server.\r\n\r\nOptions: `temurin`, `graalvm`, `graalvm-native`, `graalvm-ce`, `zulu`, `liberica`, `corretto`, `semeru`, `shenandoah`, `dragonwell`",
-            "env_variable": "JVM_RUNTIME",
+            "name": "JDK Vendor",
+            "description": "The JDK vendor to use for running the server.\r\n\r\nOptions: `temurin`, `graalvm`, `graalvm-native`, `graalvm-ce`, `zulu`, `liberica`, `corretto`, `semeru`, `shenandoah`, `dragonwell`",
+            "env_variable": "JDK_VENDOR",
             "default_value": "temurin",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:temurin,graalvm,graalvm-native,graalvm-ce,zulu,liberica,corretto,semeru,shenandoah,dragonwell",
             "field_type": "text"
-        }
+        },
         {
             "name": "Flags",
             "description": "JVM flags to use when starting the server.",

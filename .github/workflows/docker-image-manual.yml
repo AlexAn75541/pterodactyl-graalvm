@@ -1,10 +1,7 @@
-name: build aio-jdk
+name: build aio-jdk manual
 
 on:
-  push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   pterodactyl-aio-jdk:

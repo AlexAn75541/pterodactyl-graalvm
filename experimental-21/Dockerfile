@@ -124,8 +124,8 @@ RUN         apt-get update -y \
 # Copy all pre-stripped JDKs in a single layer from the builder
 COPY --from=jdk-builder /opt/java /opt/java
 
-# JVM_RUNTIME is the arg to set the type of jdk to be launched, defaulted to temurin
-ENV JVM_RUNTIME=temurin
+# JDK_VENDOR is the arg to set the type of jdk to be launched, defaulted to temurin
+ENV JDK_VENDOR=temurin
 
 USER        container
 ENV         USER=container HOME=/home/container

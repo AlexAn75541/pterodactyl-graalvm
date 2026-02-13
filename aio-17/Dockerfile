@@ -97,7 +97,7 @@ RUN         apt-get update -y \
 # Copy all pre-stripped JDKs in a single layer
 COPY --from=jdk-builder /opt/java /opt/java
 
-ENV JVM_RUNTIME=temurin
+ENV JDK_VENDOR=temurin
 
 USER        container
 ENV         USER=container HOME=/home/container

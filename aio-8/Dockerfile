@@ -19,7 +19,7 @@ FROM debian:stable-slim AS jdk-builder
 COPY --from=temurin         /opt/java/openjdk                              /opt/java/temurin
 COPY --from=corretto        /usr/lib/jvm/java-1.8.0-amazon-corretto        /opt/java/corretto
 COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
-COPY --from=dragonwell      /usr/java/dragonwell8                          /opt/java/dragonwell
+COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm

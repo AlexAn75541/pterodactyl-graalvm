@@ -7,20 +7,18 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  #delete-packages:
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checkout repository
-  #      uses: actions/checkout@v2
-  #
-  #    - name: Delete untagged Docker images
-  #      uses: Chizkiyahu/delete-untagged-ghcr-action@v6
-  #      with:
-  #        token: ${{ secrets.PAT_TOKEN }}
-  #        repository_owner: ${{ github.repository_owner }}
-  #        repository: ${{ github.repository }}
-  #        untagged_only: false
-  #        owner_type: user 
+  delete-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete untagged Docker images
+        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository_owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          untagged_only: true
+          owner_type: user
+
   pterodactyl-aio-jdk:
     name: "pterodactyl-aio-jdk:${{ matrix.tag }}"
     runs-on: ubuntu-latest

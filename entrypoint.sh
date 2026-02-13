@@ -33,6 +33,17 @@ export INTERNAL_IP
 # Set JAVA_HOME based on JVM_RUNTIME (default: temurin)
 JVM_RUNTIME=${JVM_RUNTIME:-temurin}
 export JAVA_HOME="/opt/java/${JVM_RUNTIME}"
+
+# Check if the selected JVM runtime exists
+if [ ! -d "${JAVA_HOME}" ]; then
+    echo "ERROR: JVM runtime '${JVM_RUNTIME}' is not available in this image."
+    echo "Available runtimes:"
+    ls -1 /opt/java/ 2>/dev/null || echo "  (none found)"
+    echo ""
+    echo "Please set JVM_RUNTIME to one of the available options."
+    exit 1
+fi
+
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Switch to the container's working directory

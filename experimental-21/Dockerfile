@@ -9,7 +9,10 @@ FROM eclipse-temurin:21-jdk AS temurin
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
-FROM shipilev/openjdk:21 AS shenandoah
+
+FROM shipilev/openjdk:21-lilliput AS shenandoah 
+# changed from openjdk:21-sshenandoah
+
 FROM azul/zulu-openjdk:21 AS zulu
 FROM amazoncorretto:21 AS corretto
 FROM ibm-semeru-runtimes:open-21-jdk AS semeru
@@ -88,7 +91,7 @@ RUN set -eux && \
     echo "=== Total ===" && du -sh /opt/java
 
     # too lazy to understand all ts
-    
+
 # ---- Final image ----
 FROM debian:stable-slim
 

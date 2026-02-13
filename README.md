@@ -31,7 +31,7 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 - **Dragonwell** - Alibaba's optimized OpenJDK for production workloads
 
 > [!CAUTION]
-> Note that some Java version will not be available in some vendors(Will notice this later)
+> Note that some Java version will not be available in some vendors (Look at the Included JDK Vendors for each Java version)
 
 **Kinda Optimized the Image with:**
 - Bare JDK(not JRE) with `javac`, `jshell`, `jar`, `jlink`, etc (ofc `java` is always included)

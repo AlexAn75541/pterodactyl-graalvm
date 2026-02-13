@@ -2,52 +2,59 @@
 ![license mit](https://img.shields.io/badge/license-MIT-green) 
 [![build graalvm](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AlexAn75541/pterodactyl-graalvm/actions/workflows/docker-image.yml)
 
+# Pterodactyl Multi-Vendor JDK Images
 
-# Massive update comming soon! Its not the normal stuff with these images
+Docker images for Pterodactyl Panel with multiple JDK vendors in a single container. Switch between vendors at runtime using the `JVM_RUNTIME` environment variable.
 
+## Available Images
 
-GraalVM is a high-performance runtime that provides significant improvements in application performance and efficiency which is ideal for microservices. https://www.graalvm.org/
+| Java Version | Image Tag | Included JDK Vendors |
+|--------------|-----------|---------------------|
+| **8** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-8` | Temurin, Zulu, Corretto, Semeru, Liberica, Dragonwell |
+| **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, Zulu, Corretto, Semeru, Liberica, Dragonwell |
+| **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
+| **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
+| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica _(limited vendor support)_ |
 
+## Main Features
 
-This repo will be having many unofficial ptedrodactyl build, I do not have any affiliate with rikodev, I just make this repo for my personal use lol 🧐
+**Multi-Architecture Support:** linux/amd64 (x86_64) and linux/arm64 (aarch64)
 
-___
+**GraalVM Variants (Java 17, 21):**
+- `graalvm` - Oracle GraalVM JDK
+- `graalvm-ce` - GraalVM Community Edition  
+- `graalvm-native` - GraalVM with Native Image support
 
-# Docker Container Configuration
+**Optimized Image:**
+- Bare JDK(not JRE) with javac, jshell, jar, jlink, etc
+- Stripped debug symbols for smaller size
+- Removed docs, samples, demos
+- Single-layer final copy for efficient caching
 
-| Java | Standard JVM                           	  | JDK Community Edition                              | JDK Enterprise Edition                                     |
-|------|---------------------------------------------|--------------------------------------------------- |------------------------------------------------ |
-| 8*** | ❌                                          | ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:8-EE` |
-| 11   | `ghcr.io/alexan75541/pterodactyl-graalvm:11`| ❌                                          	    | `ghcr.io/alexan75541/pterodactyl-graalvm:11-EE` |
-| 17   | `ghcr.io/alexan75541/pterodactyl-graalvm:17`| `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK` 	| `ghcr.io/alexan75541/pterodactyl-graalvm:17-EE` |
-| 19   | `ghcr.io/alexan75541/pterodactyl-graalvm:19`| ❌                                          	    | ❌                                         	  |
-| 20   | ❌                                     	    | `ghcr.io/alexan75541/pterodactyl-graalvm:20-JDK` 	| ❌                                         	  |
-| 21   | ❌                                          | `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK`*  | ❌                                         	  |
-| 22   | ❌                                     	    | `ghcr.io/alexan75541/pterodactyl-graalvm:22-JDK` 	| ❌                                         	  |
-| 23   | ❌                                     	    | `ghcr.io/alexan75541/pterodactyl-graalvm:23-JDK`	| ❌                                          |
+## How to Use In Pterodactyl Panel
 
-# Additional configuration using JDK Oracle's GraalVM
+**1. Set Docker Image in Pterodactyl Egg:**
+```json
+{
+  "docker_image": "ghcr.io/alexan75541/pterodactyl-graalvm:aio-{YOUR DESIRED VERSION}"
+}
+```
 
-| Java | Enterprise Edition equivalent*                               	    
-|------	|--------------------------------------------- |
-| 8     | ❌                                          | 
-| 11    | ❌                                          | 
-| 17    | `ghcr.io/alexan75541/pterodactyl-graalvm:17-JDK-EEequivalent`| 
-| 19   	| ❌                                             | 
-| 20   	| ❌                                     	   | 
-| 21   	| `ghcr.io/alexan75541/pterodactyl-graalvm:21-JDK-EEequivalent`| 
-| 22    | ❌                                     	   | 
-| 23** | `ghcr.io/alexan75541/pterodactyl-graalvm:23-JDK-EEequivalent`|
+**2. Add function to switch JDK Vendors for users:**
 
-*JDKs mainly pulled from GraalVM's Website and Oracle's JDK Archive 
+Add the `JVM_RUNTIME` environment variable in Pterodactyl Panel:
+- Go to your server → Startup
+- Add/edit the `JVM_RUNTIME` variable
+- Set value: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell`
+- Stop THEN start the server
 
-**JDK+23 currently not support `-Dgraal.OptWriteMotion=true/false` options
+## License and Contributing
 
-***JDK_EE 8 does not support aarch64
+MIT License - See LICENSE file
 
-# Btw I will Update 22 and 20 additional configs soon :>
-___
+Issues and PRs welcome! This repo is maintained for personal use but shared with the community(if they care lol).
 
-pls RikoDEV gib me permision to distribute this :>
-and im a fucking idiot
-
+**Credits:**
+- GraalVM: https://www.graalvm.org/
+- Pterodactyl Panel: https://pterodactyl.io/
+- All JDK vendors for their amazing work so far and I hope that I won't get killed by this

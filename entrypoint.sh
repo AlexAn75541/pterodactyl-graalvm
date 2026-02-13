@@ -30,8 +30,8 @@ export TZ
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
-# Set JAVA_HOME based on JVM_RUNTIME (default: graalvm)
-JVM_RUNTIME=${JVM_RUNTIME:-graalvm}
+# Set JAVA_HOME based on JVM_RUNTIME (default: temurin)
+JVM_RUNTIME=${JVM_RUNTIME:-temurin}
 export JAVA_HOME="/opt/java/${JVM_RUNTIME}"
 export PATH="${JAVA_HOME}/bin:${PATH}"
 

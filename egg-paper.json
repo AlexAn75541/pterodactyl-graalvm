@@ -5,7 +5,7 @@
         "update_url": null
     },
     "exported_at": "2026-01-05T18:02:31+00:00",
-    "name": "Paper with Experimental Java 21 Support",
+    "name": "Paper with AIO Java 21 Support",
     "author": "agroup168@proton.me",
     "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
     "features": [
@@ -14,16 +14,14 @@
         "pid_limit"
     ],
     "docker_images": {
-        "Java 8": "ghcr.io\/ptero-eggs\/yolks:java_8",
-        "Java 11": "ghcr.io\/ptero-eggs\/yolks:java_11",
-        "Java 16": "ghcr.io\/ptero-eggs\/yolks:java_16",
-        "Java 17": "ghcr.io\/ptero-eggs\/yolks:java_17",
-        "Java 21 Experimental": "ghcr.io\/alexan75541\/pterodactyl-graalvm:experimental-21",
-        "Java 21": "ghcr.io\/ptero-eggs\/yolks:java_21",
-        "Java 22": "ghcr.io\/ptero-eggs\/yolks:java_22"
+        "Java 8": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-8",
+        "Java 11": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-11",
+        "Java 17": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-17",
+        "Java 21": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-21",
+        "Java 25": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-25"
     },
     "file_denylist": [],
-    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M {{FLAGS}} -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
     "config": {
         "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\",\r\n            \"query.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \")! For help, type \"\r\n}",
@@ -86,6 +84,16 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:temurin,graalvm,graalvm-native,graalvm-ce,zulu,liberica,corretto,semeru,shenandoah,dragonwell",
+            "field_type": "text"
+        }
+        {
+            "name": "Flags",
+            "description": "JVM flags to use when starting the server.",
+            "env_variable": "FLAGS",
+            "default_value": "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:999",
             "field_type": "text"
         }
     ]

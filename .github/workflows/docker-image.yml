@@ -1,4 +1,4 @@
-name: build graalvm
+name: build aio-jdk
 
 on:
   push:
@@ -21,8 +21,8 @@ jobs:
   #        repository: ${{ github.repository }}
   #        untagged_only: false
   #        owner_type: user 
-  pterodactyl-graalvm:
-    name: "pterodactyl-graalvm:${{ matrix.tag }}"
+  pterodactyl-aio-jdk:
+    name: "pterodactyl-aio-jdk:${{ matrix.tag }}"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -43,6 +43,11 @@ jobs:
          # - 23
          # - 23-JDK-EEequivalent
           - experimental-21
+          - aio-8
+          - aio-11
+          - aio-17
+          - aio-21
+          - aio-25
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -89,7 +94,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ghcr.io/alexan75541/pterodactyl-graalvm
+            ghcr.io/alexan75541/pterodactyl-aio-jdk
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,${{ matrix.tag }}

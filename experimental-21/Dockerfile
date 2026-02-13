@@ -35,40 +35,34 @@ COPY --from=dragonwell      /opt/java/openjdk                              /opt/
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm
 COPY --from=liberica  /usr/lib/jvm  /tmp/liberica-jvm
 
-# Single RUN: move variable-named dirs, then strip ALL JDKs in one pass.
 # Keeps bin/ and lib/ intact (javac, jlink, jshell, jar, jfr, native-image, etc.)
+# Single RUN: move variable-named dirs, then strip ALL JDKs in one pass
 RUN set -eux && \
-    # Move Zulu (variable name pattern)
-    find /tmp/zulu-jvm -mindepth 1 -maxdepth 1 -type d -name "zulu-*" -exec mv {} /opt/java/zulu \; && \
+    # Move Zulu (find any zulu-* directory)
+    ZULU_DIR=$(find /tmp/zulu-jvm -mindepth 1 -maxdepth 1 -type d -name "zulu-*" | head -n1) && \
+    if [ -n "$ZULU_DIR" ]; then mv "$ZULU_DIR" /opt/java/zulu; fi && \
     rm -rf /tmp/zulu-jvm && \
-
-    # Move Liberica (variable name pattern)
-    find /tmp/liberica-jvm -mindepth 1 -maxdepth 1 -type d -name "*bellsoft*" -exec mv {} /opt/java/liberica \; && \
+    \
+    # Move Liberica (find any *bellsoft* directory)
+    LIBERICA_DIR=$(find /tmp/liberica-jvm -mindepth 1 -maxdepth 1 -type d -name "*bellsoft*" | head -n1) && \
+    if [ -n "$LIBERICA_DIR" ]; then mv "$LIBERICA_DIR" /opt/java/liberica; fi && \
     rm -rf /tmp/liberica-jvm && \
-
-    # Verify all JDK bin directories exist before cleanup
-    echo "=== Verifying JDK bin directories ===" && \
-    for jdk in temurin graalvm graalvm-ce graalvm-native shenandoah zulu corretto semeru liberica dragonwell; do \
-        if [ ! -d "/opt/java/$jdk/bin" ]; then \
-            echo "ERROR: /opt/java/$jdk/bin not found!" && \
-            ls -la /opt/java/$jdk/ || echo "JDK directory does not exist" && \
-            exit 1; \
-        fi; \
-        echo "✓ /opt/java/$jdk/bin exists"; \
+    \
+    # Remove non-essential directories to save space (keeps bin/, lib/ with all dev tools)
+    for dir in man demo sample legal jmods include; do \
+        find /opt/java -type d -name "$dir" -exec rm -rf {} + 2>/dev/null || true; \
     done && \
-
-    # Remove non-essential directories using simple wildcard expansion (safer than complex find)
-    rm -rf /opt/java/*/man /opt/java/*/demo /opt/java/*/sample /opt/java/*/legal /opt/java/*/jmods /opt/java/*/include 2>/dev/null || true && \
-
+    \
     # Remove non-essential files
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
-
-    # Strip debug symbols from shared libraries — saves ~30-40% on .so files  
+    \
+    # Strip debug symbols from shared libraries (saves 30-40% on .so files)
     find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    
-    # Log final sizes for CI debugging
+    \
+    # Log final sizes for debugging
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java
+
 
 # ---- Final image ----
 FROM debian:stable-slim

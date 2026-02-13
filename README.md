@@ -20,18 +20,26 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 
 **Multi-Architecture Support:** linux/amd64 (x86_64) and linux/arm64 (aarch64)
 
-**GraalVM Variants (Java 17, 21):**
-- `graalvm` - Oracle GraalVM JDK
-- `graalvm-ce` - GraalVM Community Edition  
-- `graalvm-native` - GraalVM with Native Image support
+**Multiple JDK Vendors supported:**
+- **Temurin** - Eclipse Adoptium OpenJDK, standard and widely trusted
+- **GraalVM** - Oracle GraalVM JDK with high-performance JIT compiler. Variants: `graalvm`, `graalvm-ce` (Community Edition), `graalvm-native` (with Native Image support)
+- **Shenandoah** - Ultra-low pause time GC - though some vendors here already has Shenandoah GC built-in
+- **Zulu** - Azul's certified OpenJDK build
+- **Corretto** - Amazon's production-grade OpenJDK
+- **Semeru** - IBM's OpenJ9-based runtime
+- **Liberica** - BellSoft's feature-complete OpenJDK distribution
+- **Dragonwell** - Alibaba's optimized OpenJDK for production workloads
 
-**Optimized Image:**
-- Bare JDK(not JRE) with javac, jshell, jar, jlink, etc
+> [!CAUTION]
+> Note that some Java version will not be available in some vendors(Will notice this later)
+
+**Kinda Optimized the Image with:**
+- Bare JDK(not JRE) with `javac`, `jshell`, `jar`, `jlink`, etc (ofc `java` is always included)
 - Stripped debug symbols for smaller size
 - Removed docs, samples, demos
-- Single-layer final copy for efficient caching
+- Single-layer final copy for efficient caching(post image building process)
 
-## How to Use In Pterodactyl Panel
+## How to Use In Pterodactyl Panel(or anywhere else)
 
 **1. Set Docker Image in Pterodactyl Egg:**
 ```json
@@ -41,6 +49,11 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 ```
 
 **2. Add function to switch JDK Vendors for users:**
+
+> [!NOTE]
+> Without this variable, the image will default on Temurin's JDK for the best compatibility as possible.
+> If you want to use this image without the Panel, besure to set the `JVM_RUNTIME` as an environment variable(obviously).
+> For example: `docker run -e JVM_RUNTIME=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`.
 
 Add the `JVM_RUNTIME` environment variable in Pterodactyl Panel:
 - Go to your server → Startup
@@ -57,4 +70,9 @@ Issues and PRs welcome! This repo is maintained for personal use but shared with
 **Credits:**
 - GraalVM: https://www.graalvm.org/
 - Pterodactyl Panel: https://pterodactyl.io/
-- All JDK vendors for their amazing work so far and I hope that I won't get killed by this
+- [RikoDEV's GraalVM Pterodactyl Docker Image Repo](https://github.com/RikoDEV/pterodactyl-graalvm)
+- [THE OG YOLK](https://github.com/pterodactyl/yolks)
+- [trenutoo's Pterodactyl Docker Image Repo](https://github.com/trenutoo/pterodactyl-images/)
+- All JDK vendors for their amazing work so far and I hope that I won't get killed by them
+
+

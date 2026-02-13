@@ -16,7 +16,6 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 | **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
 | **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica, **GraalVM (all 3 variants)**  |
 
-## Main Features
 
 
 ## Main Features

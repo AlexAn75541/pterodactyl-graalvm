@@ -108,9 +108,3 @@ All JDK distributions are used in accordance with their respective licenses.
 - [THE OG YOLK](https://github.com/pterodactyl/yolks)
 - [trenutoo's Pterodactyl Docker Image Repo](https://github.com/trenutoo/pterodactyl-images/)
 - And all JDK vendors for their amazing work so far and I hope that I won't get killed by them
-
-
-**Credits:**
-- GraalVM: https://www.graalvm.org/
-- Pterodactyl Panel: https://pterodactyl.io/
-- All JDK vendors for their amazing work so far and I hope that I won't get killed by this

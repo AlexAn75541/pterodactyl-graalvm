@@ -1,10 +1,10 @@
 name: build aio-jdk
 
 on:
-  push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "master" ]
+  #push:
+   # branches: [ "dev" ]
+  #pull_request:
+   # branches: [ "master" ]
   schedule:
     - cron: '0 0 * * 0'
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
          # - 17-EE
          # - 23
          # - 23-JDK-EEequivalent
-          - experimental-21
+         # - experimental-21
           - aio-8
           - aio-11
           - aio-17

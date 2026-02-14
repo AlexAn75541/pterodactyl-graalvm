@@ -4,6 +4,51 @@
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
 
+# ---- Malloc implementations builder stage ----
+FROM debian:stable-slim AS malloc-builder
+
+# Install build dependencies for both jemalloc and mimalloc
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        graphviz \
+        which \
+        lsof \
+        curl \
+        ca-certificates \
+        openssl \
+        git \
+        tar \
+        sqlite3 \
+        fontconfig \
+        libfreetype6 \
+        tzdata \
+        iproute2 \
+        libstdc++6 \
+        autoconf \
+        cmake && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt /tmp/jprof /tmp/nmt /tmp/pmap /diagnostic
+
+# Build jemalloc with profiling support
+WORKDIR /opt/jemalloc
+# We manually compile jemalloc here, as installing through apt-get (libjemalloc2) does not enable the profiling options we need in Jemalloc.
+# If you look below, we use the --enable-prof flag in the autogen.sh script to enable profiling.
+RUN git clone https://github.com/facebook/jemalloc.git . && \
+    ./autogen.sh --enable-prof && \
+    make dist && \
+    make && \
+    make install
+
+# Build mimalloc for performance, they manually compiled the mimalloc fr
+WORKDIR /opt/mimalloc
+RUN git clone https://github.com/microsoft/mimalloc.git . && \
+    mkdir -p build && \
+    cd build && \
+    cmake -DMI_BUILD_TESTS=OFF ../ && \
+    make install
+
 # get JDK source
 FROM eclipse-temurin:8-jdk AS temurin
 FROM azul/zulu-openjdk:8 AS zulu
@@ -11,6 +56,8 @@ FROM amazoncorretto:8 AS corretto
 FROM ibm-semeru-runtimes:open-8-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:8 AS liberica
 FROM alibabadragonwell/dragonwell:8 AS dragonwell
+FROM ghcr.io/graalvm/jdk:ol7-java8 AS graalvm-ce
+# used the ol7 since the build date is newer than the typical graalvm-ce one
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
@@ -20,6 +67,7 @@ COPY --from=temurin         /opt/java/openjdk                              /opt/
 COPY --from=corretto        /usr/lib/jvm/java-1.8.0-amazon-corretto        /opt/java/corretto
 COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
 COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm21-java8             /opt/java/graalvm-ce
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm
@@ -80,7 +128,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN         apt-get update -y \
-            && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales libnuma1 numactl \
+            && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales libnuma1 numactl graphviz perl procps \
             && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
             && locale-gen en_US.UTF-8 \
             && update-locale LANG=en_US.UTF-8 \
@@ -91,6 +139,13 @@ RUN         apt-get update -y \
 # Copy all pre-stripped JDKs in a single layer
 COPY --from=jdk-builder /opt/java /opt/java
 
+# Copy malloc libraries from malloc-builder
+COPY --from=malloc-builder /usr/local/lib/libjemalloc.so /usr/local/lib/libjemalloc.so
+COPY --from=malloc-builder /usr/local/lib/libmimalloc.so /usr/local/lib/libmimalloc.so
+
+# Copy jeprof tool for heap dump analysis
+COPY --from=malloc-builder /usr/local/bin/jeprof /usr/local/bin/jeprof
+
 ENV JDK_VENDOR=temurin
 
 USER        container
@@ -98,6 +153,6 @@ ENV         USER=container HOME=/home/container
 
 WORKDIR     /home/container
 
-COPY        ./../entrypoint.sh /entrypoint.sh
+COPY        ./../scripts/entrypoint.sh /entrypoint.sh
 
 CMD         ["/bin/bash", "/entrypoint.sh"]

@@ -4,6 +4,51 @@
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
 
+# ---- Malloc implementations builder stage ----
+FROM debian:stable-slim AS malloc-builder
+
+# Install build dependencies for both jemalloc and mimalloc
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        graphviz \
+        which \
+        lsof \
+        curl \
+        ca-certificates \
+        openssl \
+        git \
+        tar \
+        sqlite3 \
+        fontconfig \
+        libfreetype6 \
+        tzdata \
+        iproute2 \
+        libstdc++6 \
+        autoconf \
+        cmake && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt /tmp/jprof /tmp/nmt /tmp/pmap /diagnostic
+
+# Build jemalloc with profiling support
+WORKDIR /opt/jemalloc
+# We manually compile jemalloc here, as installing through apt-get (libjemalloc2) does not enable the profiling options we need in Jemalloc.
+# If you look below, we use the --enable-prof flag in the autogen.sh script to enable profiling.
+RUN git clone https://github.com/facebook/jemalloc.git . && \
+    ./autogen.sh --enable-prof && \
+    make dist && \
+    make && \
+    make install
+
+# Build mimalloc for performance, they manually compiled the mimalloc fr
+WORKDIR /opt/mimalloc
+RUN git clone https://github.com/microsoft/mimalloc.git . && \
+    mkdir -p build && \
+    cd build && \
+    cmake -DMI_BUILD_TESTS=OFF ../ && \
+    make install
+
 # get JDK source
 # Note: Not all vendors have Java 25 yet
 FROM eclipse-temurin:25-jdk AS temurin
@@ -88,7 +133,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN         apt-get update -y \
-            && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales libnuma1 numactl \
+            && apt-get install -y --no-install-recommends curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales libnuma1 numactl graphviz perl procps \
             && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
             && locale-gen en_US.UTF-8 \
             && update-locale LANG=en_US.UTF-8 \
@@ -98,6 +143,13 @@ RUN         apt-get update -y \
 
 # Copy all pre-stripped JDKs in a single layer
 COPY --from=jdk-builder /opt/java /opt/java
+
+# Copy malloc libraries from malloc-builder
+COPY --from=malloc-builder /usr/local/lib/libjemalloc.so /usr/local/lib/libjemalloc.so
+COPY --from=malloc-builder /usr/local/lib/libmimalloc.so /usr/local/lib/libmimalloc.so
+
+# Copy jeprof tool for heap dump analysis
+COPY --from=malloc-builder /usr/local/bin/jeprof /usr/local/bin/jeprof
 
 ENV JDK_VENDOR=temurin
 

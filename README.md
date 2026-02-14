@@ -2,9 +2,9 @@
 ![license mit](https://img.shields.io/badge/license-MIT-green) 
 [![build status](https://github.com/AlexAn75541/pterodactyl-aio-jdk/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/AlexAn75541/pterodactyl-aio-jdk/actions/workflows/docker-image.yml)
 
-# Pterodactyl JDK Images with (almost) all of the Vendors
+# Pterodactyl Multi-JDK Images
 
-Docker images for Pterodactyl Panel with multiple JDK vendors in a single container. Switch between vendors at runtime using the `JDK_VENDOR` environment variable.
+A collection of Docker images for the Pterodactyl Panel, providing multiple JDK vendors in a single container. You can switch between vendors at runtime using the `JDK_VENDOR` environment variable.
 
 ## Available Images
 
@@ -19,44 +19,44 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 
 ## Main Features
 
-**Multiple JDK Vendors supported:**
-- **Temurin** - Eclipse Adoptium OpenJDK, standard and widely trusted
-- **GraalVM** - Oracle GraalVM JDK with high-performance JIT compiler. Variants: `graalvm`, `graalvm-ce` (Community Edition), `graalvm-native` (with Native Image support)
-- **Shenandoah** - Ultra-low pause time GC - though some vendors here already has Shenandoah GC built-in
-- **Zulu** - Azul's certified OpenJDK build
-- **Corretto** - Amazon's production-grade OpenJDK
-- **Semeru** - IBM's OpenJ9-based runtime
-- **Liberica** - BellSoft's feature-complete OpenJDK distribution
-- **Dragonwell** - Alibaba's optimized OpenJDK for production workloads
+**Multiple JDK Vendors:**
+- **Temurin**: Eclipse Adoptium OpenJDK, a standard and widely trusted build.
+- **GraalVM**: Oracle's high-performance JDK. Available as `graalvm`, `graalvm-ce` (Community Edition), and `graalvm-native` (with Native Image).
+- **Shenandoah**: An ultra-low pause time garbage collector.
+- **Zulu**: Azul's certified OpenJDK build.
+- **Corretto**: Amazon's production-ready OpenJDK.
+- **Semeru**: IBM's OpenJ9-based runtime.
+- **Liberica**: BellSoft's complete OpenJDK distribution.
+- **Dragonwell**: Alibaba's optimized OpenJDK for production workloads.
 
 > [!CAUTION]
-> Note that some Java version will not be available in some vendors (Look at the Included JDK Vendors for each Java version)
+> Not all JDK vendors are available for every Java version. Please check the "Included JDK Vendors" table for details.\
+> Since almost all OpenJDK are more or less the same in term of performance, I will remove some for the sake of the images's size
 
-**Kinda Optimized the Image with:**
-- Bare JDK(not JRE) with `javac`, `jshell`, `jar`, `jlink`, etc (ofc `java` is always included)
-- Stripped debug symbols for smaller size
-- Removed docs, samples, demos
-- Single-layer final copy for efficient caching(post image building process)
+**Image Optimizations:**
+- Includes the full JDK (not just the JRE) with tools like `javac`, `jshell`, and `jar`(ofc `java` is always included lol). 
+- Debug symbols are stripped along with documentation, samples, and demos to reduce image size.
+- **jemalloc and mimalloc support**: memory allocator with built-in profiling for detecting native memory leaks(except mimalloc), both are compiled from source and included in all images but are disabled by default.
 
 ## How to Use
 
 
-### Add the `JDK_VENDOR` environment variable in Pterodactyl Panel:
+### Using the `JDK_VENDOR` Environment Variable
+
+To select a JDK vendor, set the `JDK_VENDOR` environment variable in your Pterodactyl Panel.
 
 > [!NOTE]
-> Without this variable, the image will default on Temurin's JDK for the best compatibility as possible.
-> If you want to use this image without the Panel, besure to set the `JDK_VENDOR` as an environment variable(obviously).
-> For example: `docker run -e JDK_VENDOR=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`.
+> If this variable is not set, the image will default to Temurin for maximum compatibility.\
+> To use a specific vendor outside the panel, you can set the variable with Docker's `-e` flag:\
+> `docker run -e JDK_VENDOR=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`
 
-- Go to Pterodactyl Admin Panel → Minecraft Nest → {Any Egg you wish to edit}
-- Go to Variables -> Create New Variable
-- Enter your name and description of choice
-- Add the `JDK_VENDOR` to the Environment Variable box
-- You can use any Input value in this list: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell` → as long as the rule are `required|string|max:20`
-- Go on click Create Variable
-- Stop THEN start the server, or Reinstall if unsure
+1. Go to your Pterodactyl Admin Panel → Nests → {Your Chosen Egg}.
+2. Navigate to the **Variables** tab and create a new variable.
+3. Set the **Environment Variable** to `JDK_VENDOR`.
+4. You can allow users to select from the following options: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell`.
+5. Save the variable, then restart your server for the changes to take effect.
 
-Alternatively, you can use the `egg-paper.json` in my repo, or put this in your `{whatever egg that is}.json` :
+Alternatively, you can add the following configuration to your egg's JSON file:
 
 ```
 {
@@ -82,6 +82,28 @@ Along with the list of Java version if you want:
         "Java 21": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-21",
         "Java 25": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-25"
 ```
+
+## malloc stuff (jemalloc / mimalloc)
+
+All images include pre-compiled `jemalloc` and `mimalloc` libraries(long ahh build time), which can improve performance by optimizing memory allocation(Thanks to [Skullians's Repo](https://github.com/Skullians/native-leak-profiling)). Both are disabled by default with its associated `.so` library files and can be enabled with a startup flag.
+
+> [!IMPORTANT]
+> You can only enable one memory allocator at a time.
+
+> [!WARNING]
+> And as Skullian stated, images with `mimalloc` are experimental, proceed with cautions.
+
+### Enabling a `*malloc`
+
+You can enable them by using one of these flags:
+```
+-Djemalloc=true
+
+       or 
+
+-Dmimalloc=true
+```
+### The rest of the profiling procedure for `jemalloc` are in [this part](https://github.com/Skullians/native-leak-profiling/blob/main/README.md#usage) of his repo. Be sure to check it out if you're interested.
 
 ## License and Contributing
 

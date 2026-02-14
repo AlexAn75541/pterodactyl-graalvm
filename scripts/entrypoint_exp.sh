@@ -55,6 +55,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 LIGHT_RED='\033[1;31m' 
 RESET_COLOR='\033[0m'
+CYAN='\033[0;36m'
 
 # Print Java version
 printf "${LIGHT_BLUE}container@java-info~ ${RESET_COLOR}java -version\n"
@@ -78,13 +79,13 @@ MIMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Dmimalloc=true.*/true/p')
 
 # Error handling: prevent both malloc implementations from being enabled
 if [ "$JEMALLOC_ENABLED" = "true" ] && [ "$MIMALLOC_ENABLED" = "true" ]; then
-    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}${LIGHT_RED}ERROR: Both jemalloc and mimalloc are enabled!${RESET_COLOR}\n"
-    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}You can only enable one at a time!\n"
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}${LIGHT_RED}ERROR: Both jemalloc and mimalloc are enabled!${RESET_COLOR}\n"
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}You can only enable one at a time!\n"
     exit 1
 fi
 # load the jemalloc
 if [ "$JEMALLOC_ENABLED" = "true" ]; then
-    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}Enabling jemalloc!\n"
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}Enabling jemalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libjemalloc.so" # maybe the profiling capability is baked in this one lib, and not with the other one
 fi
 
@@ -171,7 +172,7 @@ fi
 
 # all ts for mimalloc is something
 if [ "$MIMALLOC_ENABLED" = "true" ]; then
-    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}Enabling mimalloc!\n"
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}Enabling mimalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libmimalloc.so"
 fi
 

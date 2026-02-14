@@ -132,6 +132,6 @@ ENV         USER=container HOME=/home/container
 
 WORKDIR     /home/container
 
-COPY        ./../entrypoint_exp.sh /entrypoint_exp.sh
+COPY        ./../scripts/entrypoint_exp.sh /entrypoint_exp.sh
 
 CMD         ["/bin/bash", "/entrypoint_exp.sh"]

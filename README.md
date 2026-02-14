@@ -106,4 +106,5 @@ All JDK distributions are used in accordance with their respective licenses.
 - [RikoDEV's GraalVM Pterodactyl Docker Image Repo](https://github.com/RikoDEV/pterodactyl-graalvm)
 - [THE OG YOLK](https://github.com/pterodactyl/yolks)
 - [trenutoo's Pterodactyl Docker Image Repo](https://github.com/trenutoo/pterodactyl-images/)
+- [native-leak-profiling from Skullians](https://github.com/Skullians/native-leak-profiling)
 - And all JDK vendors for their amazing work so far and I hope that I won't get killed by them

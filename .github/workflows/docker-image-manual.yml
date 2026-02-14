@@ -26,11 +26,11 @@ jobs:
          # - 23
          # - 23-JDK-EEequivalent
           - experimental-21
-          - aio-8
-          - aio-11
-          - aio-17
-          - aio-21
-          - aio-25
+         # - aio-8
+         # - aio-11
+         # - aio-17
+         # - aio-21
+         # - aio-25
     steps:
       - name: Checkout
         uses: actions/checkout@v3

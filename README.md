@@ -14,7 +14,7 @@ Docker images for Pterodactyl Panel with multiple JDK vendors in a single contai
 | **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, Zulu, Corretto, Semeru, Liberica, Dragonwell |
 | **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
 | **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
-| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, Zulu, Liberica, **GraalVM (all 3 variants)** Semeru, Liberica, Dragonwell |
+| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
 
 
 ## Main Features
@@ -107,9 +107,3 @@ All JDK distributions are used in accordance with their respective licenses.
 - [THE OG YOLK](https://github.com/pterodactyl/yolks)
 - [trenutoo's Pterodactyl Docker Image Repo](https://github.com/trenutoo/pterodactyl-images/)
 - And all JDK vendors for their amazing work so far and I hope that I won't get killed by them
-
-
-**Credits:**
-- GraalVM: https://www.graalvm.org/
-- Pterodactyl Panel: https://pterodactyl.io/
-- All JDK vendors for their amazing work so far and I hope that I won't get killed by this

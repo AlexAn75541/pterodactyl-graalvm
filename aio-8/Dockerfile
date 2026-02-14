@@ -12,6 +12,7 @@ FROM ibm-semeru-runtimes:open-8-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:8 AS liberica
 FROM alibabadragonwell/dragonwell:8 AS dragonwell
 FROM ghcr.io/graalvm/jdk:ol7-java8 AS graalvm-ce
+# used the ol7 since the build date is newer than the typical graalvm-ce one
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder

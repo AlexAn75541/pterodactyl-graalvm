@@ -78,7 +78,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker meta
-        id: meta_graalvm
+        id: meta_aio_jdk
         uses: docker/metadata-action@v4
         with:
           # list of Docker images to use as base name for tags
@@ -89,11 +89,12 @@ jobs:
             type=raw,${{ matrix.tag }}
             
       - name: Build and push
-        uses: docker/build-push-action@v3
+        id: docker_build
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./${{ matrix.tag }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta_graalvm.outputs.tags }}
-          labels: ${{ steps.meta_graalvm.outputs.labels }}
+          tags: ${{ steps.meta_aio_jdk.outputs.tags }}
+          labels: ${{ steps.meta_aio_jdk.outputs.labels }}

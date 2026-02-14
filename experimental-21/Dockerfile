@@ -173,7 +173,7 @@ COPY --from=jdk-builder /opt/java /opt/java
 # Copy malloc libraries from malloc-builder
 COPY --from=malloc-builder /usr/local/lib/libjemalloc.so /usr/local/lib/libjemalloc.so
 COPY --from=malloc-builder /usr/local/lib/libmimalloc.so /usr/local/lib/libmimalloc.so
-# what
+# hell yeah
 
 # Copy jeprof tool for heap dump analysis
 COPY --from=malloc-builder /usr/local/bin/jeprof /usr/local/bin/jeprof

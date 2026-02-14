@@ -71,30 +71,28 @@ echo ""
 PARSED=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g' | eval echo "$(cat -)")
 DUMPS_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Ddump=\([^ ]*\).*/\1/p')
 TRACE_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Danalyse=\([^ ]*\).*/\1/p')
-JEMALLOC_DISABLED=$(echo "$PARSED" | sed -n 's/.*-Djemalloc=false.*/true/p')
-# combined all in a img, so imma make an error handling for this, its either each or nothing of them
-MIMALLOC_DISABLED=$(echo "$PARSED" | sed -n 's/.*-Dmimalloc=false.*/true/p')
 
-if [ -z "$JEMALLOC_DISABLED" ] && [ -z "$MIMALLOC_DISABLED" ]; then
+# Check if malloc implementations are explicitly enabled (disabled by default)
+JEMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Djemalloc=true.*/true/p')
+MIMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Dmimalloc=true.*/true/p')
+
+# Error handling: prevent both malloc implementations from being enabled
+if [ "$JEMALLOC_ENABLED" = "true" ] && [ "$MIMALLOC_ENABLED" = "true" ]; then
     printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}${LIGHT_RED}ERROR: Both jemalloc and mimalloc are enabled!${RESET_COLOR}\n"
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}You must disable either one of them\n"
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}or just disable them all for your sake! \n"
+    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}You can only enable one at a time!\n"
     exit 1
 fi
 
-if [ -z "$JEMALLOC_DISABLED" ]; then
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}Enabling jemalloc support\n"
+if [ "$JEMALLOC_ENABLED" = "true" ]; then
+    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}Enabling jemalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libjemalloc.so"
 fi
-# Display the command we're running in the output, and then execute it with the env
-# from the container itself.
-printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}%s\n" "$PARSED"
 
 # failsafe in case dumps folder does not exist
 mkdir -p dumps
 
 
-
+# im gonna pretend that i under stand ts
 
 # haha we hate nohup
 if [ "$DUMPS_ENABLED" = "true" ]; then
@@ -171,10 +169,9 @@ if [ "$TRACE_ENABLED" = "true" ]; then
 fi
 
 
-# all ts for mimmaloc is something
-MIMALLOC_DISABLED=$(echo "$PARSED" | sed -n 's/.*-Dmimalloc=false.*/true/p')
-if [ -z "$MIMALLOC_DISABLED" ]; then
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}Enabling mimalloc support\n"
+# all ts for mimalloc is something
+if [ "$MIMALLOC_ENABLED" = "true" ]; then
+    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}Enabling mimalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libmimalloc.so"
 fi
 

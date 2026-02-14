@@ -64,7 +64,10 @@ jobs:
         
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
+        with:
+                buildkitd-flags: --debug
+
 
       - name: Login to GHCR
         if: github.event_name != 'pull_request'
@@ -75,7 +78,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker meta
-        id: meta_graalvm
+        id: meta_aio_jdk
         uses: docker/metadata-action@v4
         with:
           # list of Docker images to use as base name for tags
@@ -84,13 +87,17 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,${{ matrix.tag }}
+          
             
       - name: Build and push
-        uses: docker/build-push-action@v3
+        id: docker_build
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./${{ matrix.tag }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta_graalvm.outputs.tags }}
-          labels: ${{ steps.meta_graalvm.outputs.labels }}
+          tags: ${{ steps.meta_aio_jdk.outputs.tags }}
+          labels: ${{ steps.meta_aio_jdk.outputs.labels }}
+          cache-from: type=gha # what is this
+          cache-to: type=gha,mode=max

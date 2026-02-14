@@ -9,6 +9,7 @@ FROM eclipse-temurin:11-jdk AS temurin
 FROM azul/zulu-openjdk:11 AS zulu
 FROM amazoncorretto:11 AS corretto
 FROM ghcr.io/graalvm/jdk:ol9-java11 AS graalvm-ce
+# used the ol9 since the build date is newer than the typical graalvm-ce one
 FROM ibm-semeru-runtimes:open-11-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:11 AS liberica
 FROM alibabadragonwell/dragonwell:11 AS dragonwell

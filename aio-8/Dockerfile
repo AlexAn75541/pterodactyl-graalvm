@@ -11,6 +11,7 @@ FROM amazoncorretto:8 AS corretto
 FROM ibm-semeru-runtimes:open-8-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:8 AS liberica
 FROM alibabadragonwell/dragonwell:8 AS dragonwell
+FROM ghcr.io/graalvm/jdk:ol7-java8 AS graalvm-ce
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
@@ -20,6 +21,7 @@ COPY --from=temurin         /opt/java/openjdk                              /opt/
 COPY --from=corretto        /usr/lib/jvm/java-1.8.0-amazon-corretto        /opt/java/corretto
 COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
 COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm21-ce-java8             /opt/java/graalvm-ce
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm

@@ -78,14 +78,14 @@ MIMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Dmimalloc=true.*/true/p')
 
 # Error handling: prevent both malloc implementations from being enabled
 if [ "$JEMALLOC_ENABLED" = "true" ] && [ "$MIMALLOC_ENABLED" = "true" ]; then
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}${LIGHT_RED}ERROR: Both jemalloc and mimalloc are enabled!${RESET_COLOR}\n"
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}You can only enable one at a time!\n"
+    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}${LIGHT_RED}ERROR: Both jemalloc and mimalloc are enabled!${RESET_COLOR}\n"
+    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}You can only enable one at a time!\n"
     exit 1
 fi
-
+# load the jemalloc
 if [ "$JEMALLOC_ENABLED" = "true" ]; then
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}Enabling jemalloc!\n"
-    export LD_PRELOAD="/usr/local/lib/libjemalloc.so"
+    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}Enabling jemalloc!\n"
+    export LD_PRELOAD="/usr/local/lib/libjemalloc.so" # maybe the profiling capability is baked in this one lib, and not with the other one
 fi
 
 # failsafe in case dumps folder does not exist
@@ -171,9 +171,13 @@ fi
 
 # all ts for mimalloc is something
 if [ "$MIMALLOC_ENABLED" = "true" ]; then
-    printf "${GREEN}container@game-panel-command~ ${RESET_COLOR}Enabling mimalloc!\n"
+    printf "${YELLOW}container@memory-allocator~ ${RESET_COLOR}Enabling mimalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libmimalloc.so"
 fi
+
+
+
+
 
 # Display the command we're running in the output, and then execute it with the env
 # from the container itself.

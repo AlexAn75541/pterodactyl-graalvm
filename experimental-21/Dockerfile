@@ -159,7 +159,7 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # NUMA tools and stuff here + jemalloc profiling tools (graphviz, perl for jeprof)
 RUN         apt-get update -y \
-            && apt-get install -y --no-install-recommends screen curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof tzdata iproute2 locales libnuma1 numactl graphviz perl \
+            && apt-get install -y --no-install-recommends screen curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof tzdata iproute2 locales libnuma1 numactl graphviz perl procps \
             && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \                                                                                                                          
             && locale-gen en_US.UTF-8 \
             && update-locale LANG=en_US.UTF-8 \

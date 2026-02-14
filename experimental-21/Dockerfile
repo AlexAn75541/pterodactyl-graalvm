@@ -25,7 +25,8 @@ RUN apt-get update && \
         tzdata \
         iproute2 \
         libstdc++6 \
-        autoconf && \
+        autoconf \
+        cmake && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt /tmp/jprof /tmp/nmt /tmp/pmap /diagnostic
@@ -49,24 +50,7 @@ RUN git clone https://github.com/microsoft/mimalloc.git . && \
     cmake -DMI_BUILD_TESTS=OFF ../ && \
     make install
 
-
-
-# Copy malloc libraries from malloc-builder
-COPY --from=malloc-builder /usr/local/lib/libjemalloc.so /usr/local/lib/libjemalloc.so
-COPY --from=malloc-builder /usr/local/lib/libmimalloc.so /usr/local/lib/libmimalloc.so
-
-# what
-# ngl ts looks confused as hell
-
-
-# Copy jeprof tool for heap dump analysis
-COPY --from=malloc-builder /usr/local/bin/jeprof /usr/local/bin/jeprof
-
-
-
-
-
-    # get JDK source,
+# ---- JDK source stages ----
 FROM eclipse-temurin:21-jdk AS temurin
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
 FROM ghcr.io/graalvm/jdk-community:21 AS graalvm-ce
@@ -175,7 +159,7 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # NUMA tools and stuff here + jemalloc profiling tools (graphviz, perl for jeprof)
 RUN         apt-get update -y \
-            && apt-get install -y --no-install-recommends screen libjemalloc-dev curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof build-essential tzdata iproute2 locales libstdc++6 libnuma1 numactl graphviz perl \
+            && apt-get install -y --no-install-recommends screen curl ca-certificates openssl git tar sqlite3 fontconfig libfreetype6 libstdc++6 lsof tzdata iproute2 locales libnuma1 numactl graphviz perl \
             && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \                                                                                                                          
             && locale-gen en_US.UTF-8 \
             && update-locale LANG=en_US.UTF-8 \
@@ -185,6 +169,14 @@ RUN         apt-get update -y \
 
 # Copy all pre-stripped JDKs in a single layer from the builder
 COPY --from=jdk-builder /opt/java /opt/java
+
+# Copy malloc libraries from malloc-builder
+COPY --from=malloc-builder /usr/local/lib/libjemalloc.so /usr/local/lib/libjemalloc.so
+COPY --from=malloc-builder /usr/local/lib/libmimalloc.so /usr/local/lib/libmimalloc.so
+# what
+
+# Copy jeprof tool for heap dump analysis
+COPY --from=malloc-builder /usr/local/bin/jeprof /usr/local/bin/jeprof
 
 
 

@@ -8,6 +8,7 @@
 FROM eclipse-temurin:11-jdk AS temurin
 FROM azul/zulu-openjdk:11 AS zulu
 FROM amazoncorretto:11 AS corretto
+FROM ghcr.io/graalvm/jdk:ol9-java11 AS graalvm-ce
 FROM ibm-semeru-runtimes:open-11-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:11 AS liberica
 FROM alibabadragonwell/dragonwell:11 AS dragonwell
@@ -20,6 +21,7 @@ COPY --from=temurin         /opt/java/openjdk                              /opt/
 COPY --from=corretto        /usr/lib/jvm/java-11-amazon-corretto           /opt/java/corretto
 COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
 COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm22-ce-java11         /opt/java/graalvm-ce
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm

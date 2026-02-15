@@ -53,9 +53,9 @@ RUN git clone https://github.com/microsoft/mimalloc.git . && \
 FROM eclipse-temurin:8-jdk AS temurin
 FROM azul/zulu-openjdk:8 AS zulu
 FROM amazoncorretto:8 AS corretto
-FROM ibm-semeru-runtimes:open-8-jdk AS semeru
+# FROM ibm-semeru-runtimes:open-8-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:8 AS liberica
-FROM alibabadragonwell/dragonwell:8 AS dragonwell
+# FROM alibabadragonwell/dragonwell:8 AS dragonwell
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
@@ -63,8 +63,8 @@ FROM debian:stable-slim AS jdk-builder
 # Copy all JDKs into the builder
 COPY --from=temurin         /opt/java/openjdk                              /opt/java/temurin
 COPY --from=corretto        /usr/lib/jvm/java-1.8.0-amazon-corretto        /opt/java/corretto
-COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
-COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+# COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
+# COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm
@@ -107,8 +107,8 @@ RUN set -eux && \
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
     \
     # Strip debug symbols from shared libraries
-    find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    \
+    # find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
+    # \
     # Log final sizes
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java

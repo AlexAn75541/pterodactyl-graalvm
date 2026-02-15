@@ -131,6 +131,7 @@ RUN set -eux && \
         find /opt/java -type d -name "$dir" -exec rm -rf {} + 2>/dev/null || true; \
     done && \
     \
+    # EXPERIMENTAL STUFF RIGHT HERE
     # Remove specific debug tools (keep javac, jar, and ct.sym for Minecraft compatibility)
     for tool in jdb jshell jrunscript; do \
         find /opt/java -type f -name "$tool" -delete 2>/dev/null || true; \

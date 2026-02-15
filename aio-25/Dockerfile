@@ -57,9 +57,9 @@ FROM bellsoft/liberica-openjdk-debian:25 AS liberica
 FROM container-registry.oracle.com/graalvm/jdk:25 AS graalvm
 FROM ghcr.io/graalvm/jdk-community:25 AS graalvm-ce
 FROM amazoncorretto:25 AS corretto
-FROM ibm-semeru-runtimes:open-25-jdk AS semeru
+# FROM ibm-semeru-runtimes:open-25-jdk AS semeru
 FROM container-registry.oracle.com/graalvm/native-image:25 AS graalvm-native
-FROM alibabadragonwell/dragonwell:25 AS dragonwell
+# FROM alibabadragonwell/dragonwell:25 AS dragonwell
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
@@ -71,8 +71,8 @@ COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm-community-java25    /opt/
 COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java25              /opt/java/graalvm-native
 COPY --from=corretto        /usr/lib/jvm/java-25-amazon-corretto           /opt/java/corretto
 COPY --from=temurin         /opt/java/openjdk                              /opt/java/temurin
-COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
-COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+# COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
+# COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm
@@ -115,8 +115,8 @@ RUN set -eux && \
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
     \
     # Strip debug symbols from shared libraries
-    find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    \
+    # find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
+    # \
     # Log final sizes
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java

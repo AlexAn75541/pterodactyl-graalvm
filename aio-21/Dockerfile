@@ -54,12 +54,12 @@ FROM eclipse-temurin:21-jdk AS temurin
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
 FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
-FROM shipilev/openjdk:21-lilliput AS shenandoah
+# FROM shipilev/openjdk:21-lilliput AS shenandoah
 FROM azul/zulu-openjdk:21 AS zulu
 FROM amazoncorretto:21 AS corretto
-FROM ibm-semeru-runtimes:open-21-jdk AS semeru
+# FROM ibm-semeru-runtimes:open-21-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:21 AS liberica
-FROM alibabadragonwell/dragonwell:21 AS dragonwell
+# FROM alibabadragonwell/dragonwell:21 AS dragonwell
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
@@ -69,10 +69,10 @@ COPY --from=temurin         /opt/java/openjdk                              /opt/
 COPY --from=graalvm         /usr/lib64/graalvm/graalvm-java21              /opt/java/graalvm
 COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm-community-java21    /opt/java/graalvm-ce
 COPY --from=graalvm-native  /usr/lib64/graalvm/graalvm-java21              /opt/java/graalvm-native
-COPY --from=shenandoah      /opt/jdk                                       /opt/java/shenandoah
+# COPY --from=shenandoah      /opt/jdk                                       /opt/java/shenandoah
 COPY --from=corretto        /usr/lib/jvm/java-21-amazon-corretto           /opt/java/corretto
-COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
-COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+# COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
+# COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
 
 # Zulu and Liberica use variable directory names
 COPY --from=zulu      /usr/lib/jvm  /tmp/zulu-jvm
@@ -115,8 +115,8 @@ RUN set -eux && \
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
     \
     # Strip debug symbols from shared libraries
-    find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    \
+    # find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
+    # \
     # Log final sizes
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java

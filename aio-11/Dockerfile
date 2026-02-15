@@ -55,9 +55,9 @@ FROM azul/zulu-openjdk:11 AS zulu
 FROM amazoncorretto:11 AS corretto
 FROM ghcr.io/graalvm/jdk:ol9-java11 AS graalvm-ce
 # used the ol9 since the build date is newer than the typical graalvm-ce one
-FROM ibm-semeru-runtimes:open-11-jdk AS semeru
+# FROM ibm-semeru-runtimes:open-11-jdk AS semeru
 FROM bellsoft/liberica-openjdk-debian:11 AS liberica
-FROM alibabadragonwell/dragonwell:11 AS dragonwell
+# FROM alibabadragonwell/dragonwell:11 AS dragonwell
 
 # ---- Builder stage: assemble and strip all JDKs in one place ----
 FROM debian:stable-slim AS jdk-builder
@@ -65,8 +65,8 @@ FROM debian:stable-slim AS jdk-builder
 # Copy all JDKs into the builder
 COPY --from=temurin         /opt/java/openjdk                              /opt/java/temurin
 COPY --from=corretto        /usr/lib/jvm/java-11-amazon-corretto           /opt/java/corretto
-COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
-COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
+# COPY --from=semeru          /opt/java/openjdk                              /opt/java/semeru
+# COPY --from=dragonwell      /opt/java/openjdk                              /opt/java/dragonwell
 COPY --from=graalvm-ce      /usr/lib64/graalvm/graalvm22-ce-java11         /opt/java/graalvm-ce
 
 # Zulu and Liberica use variable directory names
@@ -110,8 +110,8 @@ RUN set -eux && \
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
     \
     # Strip debug symbols from shared libraries
-    find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    \
+    # find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
+    # \
     # Log final sizes
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java

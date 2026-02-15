@@ -10,11 +10,11 @@ A collection of Docker images for the Pterodactyl Panel, providing multiple JDK 
 
 | Java Version | Image Tag | Included JDK Vendors |
 |--------------|-----------|---------------------|
-| **8** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-8` | Temurin, **GraalVM (only `ce` variant)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
-| **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, **GraalVM (only `ce` variant)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
-| **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
-| **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell, Shenandoah |
-| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Semeru, Liberica, Dragonwell |
+| **8** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-8` | Temurin, **GraalVM (only `ce` variant)**, Zulu, Corretto, Liberica |
+| **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, **GraalVM (only `ce` variant)**, Zulu, Corretto, Liberica |
+| **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
+| **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
+| **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
 
 
 ## Main Features
@@ -22,22 +22,22 @@ A collection of Docker images for the Pterodactyl Panel, providing multiple JDK 
 **Multiple JDK Vendors:**
 - **Temurin**: Eclipse Adoptium OpenJDK, a standard and widely trusted build.
 - **GraalVM**: Oracle's high-performance JDK. Available as `graalvm`, `graalvm-ce` (Community Edition), and `graalvm-native` (with Native Image).
-- **Shenandoah**: An ultra-low pause time garbage collector(Though almost every mordern JDKs has a similar Shenandoah GC, will remove later if deemed unessesary).
+- ~~Shenandoah: An ultra-low pause time garbage collector~~ REMOVED
 - **Zulu**: Azul's certified OpenJDK build.
 - **Corretto**: Amazon's production-ready OpenJDK.
-- **Semeru**: IBM's OpenJ9-based runtime.
+- ~~Semeru: IBM's OpenJ9-based runtime.~~ Only available Docker image JVM type is OpenJDK, therefore deemed as unnessesary and removed
 - **Liberica**: BellSoft's complete OpenJDK distribution.
-- **Dragonwell**: Alibaba's optimized OpenJDK for production workloads.
+- ~~Dragonwell: Alibaba's optimized OpenJDK for production workloads.~~ REMOVED
 
 > [!CAUTION]
 > Not all JDK vendors are available for every Java version. Please check the "Included JDK Vendors" table for details.\
-> Since almost all OpenJDK are more or less the same in term of performance, I will remove some for the sake of the images's size
+> Since almost all OpenJDK builds are more or less the same in term of performance, I will remove some for the sake of the images's size
 
-**Image Optimizations:**
+**Optimizations and other features:**
 - Includes the full JDK (not just the JRE) with tools like `javac`, `jshell`, and `jar`(ofc `java` is always included lol). 
-- Debug symbols are stripped along with documentation, samples, and demos to reduce image size.
+- Documentation, samples, and demos are stripped to reduce image size.
 - **jemalloc and mimalloc support**: memory allocator with built-in profiling for detecting native memory leaks(except mimalloc), both are compiled from source and included in all images but are disabled by default.
-
+- Monthly Github Action build at the start of the first day in a month at UTC timezone, to ensure changes from the upstream images can be automatically added to the next build
 ## How to Use
 
 
@@ -96,7 +96,7 @@ All images include pre-compiled `jemalloc` and `mimalloc` libraries(long ahh bui
 
 ### Enabling a `*malloc`
 
-You can enable them by using one of these flags:
+You can enable them by using one of these flags(behind the `java ` start point):
 ```
 -Djemalloc=true
 
@@ -104,7 +104,7 @@ You can enable them by using one of these flags:
 
 -Dmimalloc=true
 ```
-### The rest of the profiling procedure for `jemalloc` are in [this part](https://github.com/Skullians/native-leak-profiling/blob/main/README.md#usage) of his repo. Be sure to check it out if you're interested.
+### The rest of the profiling procedure for `jemalloc` are in [this part](https://github.com/Skullians/native-leak-profiling/blob/main/README.md#usage) of his repo, as well as other knowledges. Be sure to check it out if you're interested.
 
 ## License and Contributing
 
@@ -130,4 +130,8 @@ All JDK distributions are used in accordance with their respective licenses.
 - [THE OG YOLK](https://github.com/pterodactyl/yolks)
 - [trenutoo's Pterodactyl Docker Image Repo](https://github.com/trenutoo/pterodactyl-images/)
 - [native-leak-profiling from Skullians](https://github.com/Skullians/native-leak-profiling)
+- [WhichJDK](https://whichjdk.com/) for JDK recommendations
 - And all JDK vendors for their amazing work so far and I hope that I won't get killed by them
+
+
+Java and OpenJDK are trademarks or registered trademarks of Oracle and/or its affiliates.

@@ -58,7 +58,7 @@ To select a JDK vendor, set the `JDK_VENDOR` environment variable in your Pterod
 1. Go to your Pterodactyl Admin Panel → Nests → {Your Chosen Egg}.
 2. Navigate to the **Variables** tab and create a new variable.
 3. Set the **Environment Variable** to `JDK_VENDOR`.
-4. You can allow users to select from the following options: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`, `semeru`, `liberica`, or `dragonwell`.
+4. You can allow users to select from the following options: `temurin` (default), `graalvm`, `graalvm-ce`, `graalvm-native`, `shenandoah`, `zulu`, `corretto`.
 5. Save the variable, then restart your server for the changes to take effect.
 
 Alternatively, you can add the following configuration to your egg's JSON file:

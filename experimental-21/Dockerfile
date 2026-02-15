@@ -131,12 +131,20 @@ RUN set -eux && \
         find /opt/java -type d -name "$dir" -exec rm -rf {} + 2>/dev/null || true; \
     done && \
     \
+    # Remove specific debug tools (keep javac, jar, and ct.sym for Minecraft compatibility)
+    for tool in jdb jshell jrunscript; do \
+        find /opt/java -type f -name "$tool" -delete 2>/dev/null || true; \
+    done && \
+    \
     # Remove non-essential files
     find /opt/java -type f \( -name "src.zip" -o -name "*.debuginfo" -o -name "*.diz" -o -name "*.map" \) -delete 2>/dev/null || true && \
     \
+
     # Strip debug symbols from shared libraries 
-    find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
-    \
+    # find /opt/java -type f \( -name "*.so" -o -name "*.so.*" \) -exec strip --strip-debug {} \; 2>/dev/null || true && \
+    # \
+    # since debug symbols are maybe already stripped out or im just too dumb to found out that some of these could break profiling tools, so pass on from this one
+
     # Log final sizes for debugging
     echo "=== Per-JDK sizes ===" && du -sh /opt/java/* && \
     echo "=== Total ===" && du -sh /opt/java

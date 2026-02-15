@@ -30,6 +30,8 @@ export TZ
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
+
+
 # Set JAVA_HOME based on JDK_VENDOR (default: temurin)
 JDK_VENDOR=${JDK_VENDOR:-temurin}
 export JAVA_HOME="/opt/java/${JDK_VENDOR}"
@@ -43,6 +45,10 @@ if [ ! -d "${JAVA_HOME}" ]; then
     echo "Please set JDK_VENDOR to one of the available options."
     exit 1
 fi
+
+
+
+
 
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
@@ -61,6 +67,11 @@ RESET_COLOR='\033[0m'
 printf "${LIGHT_BLUE}container@java-info~ ${RESET_COLOR}java -version\n"
 java -version 2>&1 | cat
 echo ""
+
+
+
+
+
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
@@ -169,6 +180,13 @@ if [ "$MIMALLOC_ENABLED" = "true" ]; then
     printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}Enabling mimalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libmimalloc.so"
 fi
+
+
+
+
+
+
+
 
 # Display the command we're running in the output, and then execute it with the env
 # from the container itself.

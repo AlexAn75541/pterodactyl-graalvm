@@ -22,7 +22,7 @@ A collection of Docker images for the Pterodactyl Panel, providing multiple JDK 
 **Multiple JDK Vendors:**
 - **Temurin**: Eclipse Adoptium OpenJDK, a standard and widely trusted build.
 - **GraalVM**: Oracle's high-performance JDK. Available as `graalvm`, `graalvm-ce` (Community Edition), and `graalvm-native` (with Native Image).
-- **Shenandoah**: An ultra-low pause time garbage collector.
+- **Shenandoah**: An ultra-low pause time garbage collector(Though almost every mordern JDKs has a similar Shenandoah GC, will remove later if deemed unessesary).
 - **Zulu**: Azul's certified OpenJDK build.
 - **Corretto**: Amazon's production-ready OpenJDK.
 - **Semeru**: IBM's OpenJ9-based runtime.
@@ -48,7 +48,7 @@ To select a JDK vendor, set the `JDK_VENDOR` environment variable in your Pterod
 > [!NOTE]
 > If this variable is not set, the image will default to Temurin for maximum compatibility.\
 > To use a specific vendor outside the panel, you can set the variable with Docker's `-e` flag:\
-> `docker run -e JDK_VENDOR=zulu ghcr.io/alexan75541/pterodactyl-graalvm:aio-21`
+> `docker run -e JDK_VENDOR=zulu ghcr.io/alexan75541/pterodactyl-aio-jdk:aio-21`
 
 1. Go to your Pterodactyl Admin Panel → Nests → {Your Chosen Egg}.
 2. Navigate to the **Variables** tab and create a new variable.
@@ -81,6 +81,7 @@ Along with the list of Java version if you want:
         "Java 17": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-17",
         "Java 21": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-21",
         "Java 25": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-25"
+}
 ```
 
 ## malloc stuff (jemalloc / mimalloc)

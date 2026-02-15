@@ -90,7 +90,7 @@ jobs:
             
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./${{ matrix.tag }}/Dockerfile
@@ -98,3 +98,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_aio_jdk.outputs.tags }}
           labels: ${{ steps.meta_aio_jdk.outputs.labels }}
+          cache-from: type=gha # what is this
+          cache-to: type=gha,mode=max

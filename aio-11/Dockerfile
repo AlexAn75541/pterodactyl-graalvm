@@ -94,7 +94,7 @@ RUN set -eux && \
     rm -rf /tmp/liberica-jvm && \
     \
     # Verify every JDK has a bin/java
-    for jdk in temurin zulu corretto semeru liberica dragonwell; do \
+    for jdk in temurin zulu corretto liberica graalvm-ce; do \
         if [ ! -f "/opt/java/$jdk/bin/java" ]; then \
             echo "ERROR: /opt/java/$jdk/bin/java not found!" && exit 1; \
         fi; \

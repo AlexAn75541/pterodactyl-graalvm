@@ -34,8 +34,12 @@ jobs:
          # - experimental-21
           - aio-8
           - aio-11
+          - aio-16
           - aio-17
+          - aio-18
+          - aio-19
           - aio-21
+          - aio-24
           - aio-25
     steps:
       - name: Checkout

@@ -52,7 +52,7 @@ RUN git clone https://github.com/microsoft/mimalloc.git . && \
 # get JDK source
 FROM eclipse-temurin:21-jdk AS temurin
 FROM container-registry.oracle.com/graalvm/jdk:21 AS graalvm
-FROM ghcr.io/graalvm/jdk-community:21.0.2 AS graalvm-ce
+FROM ghcr.io/graalvm/jdk-community:21 AS graalvm-ce
 FROM container-registry.oracle.com/graalvm/native-image:21 AS graalvm-native
 # FROM shipilev/openjdk:21-lilliput AS shenandoah
 FROM azul/zulu-openjdk:21 AS zulu
@@ -99,7 +99,7 @@ RUN set -eux && \
     rm -rf /tmp/liberica-jvm && \
     \
     # Verify every JDK has a bin/java
-    for jdk in temurin graalvm graalvm-ce graalvm-native zulu corretto shenandoah semeru liberica dragonwell; do \
+    for jdk in temurin graalvm graalvm-ce graalvm-native zulu corretto liberica; do \
         if [ ! -f "/opt/java/$jdk/bin/java" ]; then \
             echo "ERROR: /opt/java/$jdk/bin/java not found!" && exit 1; \
         fi; \

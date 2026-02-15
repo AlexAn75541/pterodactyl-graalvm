@@ -40,7 +40,7 @@ A collection of Docker images for the Pterodactyl Panel, providing multiple JDK 
 **Optimizations and other features:**
 - Includes the full JDK (not just the JRE) with tools like `javac`, `jshell`, and `jar`(ofc `java` is always included lol). 
 - Documentation, samples, and demos are stripped to reduce image size.
-- **jemalloc and mimalloc support**: memory allocator with built-in profiling for detecting native memory leaks(except mimalloc), both are compiled from source and included in all images but are disabled by default.
+- **jemalloc and mimalloc support**: memory allocator with built-in profiling for detecting native memory leaks(except mimalloc), both are compiled from source and included in all images but are disabled by default. *That one Automatic Jemalloc/Jeprof dumps still roughly implemented, will fix later*
 - Monthly Github Action build at the start of the first day in a month at UTC timezone, to ensure changes from the upstream images can be automatically added to the next build
 - If theres any important patches/updates that needed to be include in these images, feel free to send me a **Build Request** email to `agroup168@proton.me` and I will consider to trigger the building process manually
 ## How to Use

@@ -62,6 +62,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 LIGHT_RED='\033[1;31m'
 RESET_COLOR='\033[0m'
+CYAN='\033[0;36m'
 
 # Print Java version
 printf "${LIGHT_BLUE}container@java-info~ ${RESET_COLOR}java -version\n"

@@ -12,8 +12,12 @@ A collection of Docker images for the Pterodactyl Panel, providing multiple JDK 
 |--------------|-----------|---------------------|
 | **8** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-8` | Temurin, **GraalVM (only `ce` variant)**, Zulu, Corretto, Liberica |
 | **11** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-11` | Temurin, **GraalVM (only `ce` variant)**, Zulu, Corretto, Liberica |
+| **16** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-16` | Temurin, Zulu, Corretto, Liberica |
 | **17** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-17` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
+| **18** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-18` | Temurin, Zulu, Corretto, Liberica |
+| **19** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-19` | Temurin, Zulu, Corretto, Liberica |
 | **21** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-21` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
+| **24** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-24` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
 | **25** | `ghcr.io/alexan75541/pterodactyl-graalvm:aio-25` | Temurin, **GraalVM (all 3 variants)**, Zulu, Corretto, Liberica |
 
 
@@ -61,12 +65,12 @@ Alternatively, you can add the following configuration to your egg's JSON file:
 ```
 {
             "name": "JDK Vendor",
-            "description": "The JDK vendor to use for running the server.\r\n\r\nOptions: `temurin`, `graalvm`, `graalvm-native`, `graalvm-ce`, `zulu`, `liberica`, `corretto`, `semeru`, `shenandoah`, `dragonwell`",
+            "description": "The JDK vendor to use for running the server.\r\n\r\nOptions: `temurin`, `graalvm`, `graalvm-native`, `graalvm-ce`, `zulu`, `liberica`, `corretto`",
             "env_variable": "JDK_VENDOR",
             "default_value": "temurin",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|in:temurin,graalvm,graalvm-native,graalvm-ce,zulu,liberica,corretto,semeru,shenandoah,dragonwell",
+            "rules": "required|string|in:temurin,graalvm,graalvm-native,graalvm-ce,zulu,liberica,corretto,",
             "field_type": "text"
 }
 
@@ -78,8 +82,12 @@ Along with the list of Java version if you want:
 "docker_images": {
         "Java 8": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-8",
         "Java 11": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-11",
+        "Java 16": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-16",
         "Java 17": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-17",
+        "Java 18": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-18",
+        "Java 19": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-19",
         "Java 21": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-21",
+        "Java 24": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-24",
         "Java 25": "ghcr.io\/alexan75541\/pterodactyl-aio-jdk:aio-25"
 }
 ```

@@ -2,9 +2,10 @@ name: build experimental manual
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   pterodactyl-aio-jdk:

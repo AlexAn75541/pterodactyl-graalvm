@@ -76,11 +76,17 @@ TRACE_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Danalyse=\([^ ]*\).*/\1/p')
 # Check if malloc implementations are explicitly enabled (disabled by default)
 JEMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Djemalloc=true.*/true/p')
 MIMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Dmimalloc=true.*/true/p')
+TCMALLOC_ENABLED=$(echo "$PARSED" | sed -n 's/.*-Dtcmalloc=true.*/true/p')
 
-# Error handling: prevent both malloc implementations from being enabled
-if [ "$JEMALLOC_ENABLED" = "true" ] && [ "$MIMALLOC_ENABLED" = "true" ]; then
-    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}${LIGHT_RED}ERROR: Both jemalloc and mimalloc are enabled!${RESET_COLOR}\n"
-    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}You can only enable one at a time!\n"
+# Error handling: only one malloc implementation can be enabled at a time
+ALLOCATORS_ENABLED=0
+[ "$JEMALLOC_ENABLED" = "true" ] && ALLOCATORS_ENABLED=$((ALLOCATORS_ENABLED + 1))
+[ "$MIMALLOC_ENABLED" = "true" ] && ALLOCATORS_ENABLED=$((ALLOCATORS_ENABLED + 1))
+[ "$TCMALLOC_ENABLED" = "true" ] && ALLOCATORS_ENABLED=$((ALLOCATORS_ENABLED + 1))
+
+if [ "$ALLOCATORS_ENABLED" -gt 1 ]; then
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}${LIGHT_RED}ERROR: Multiple malloc allocators are enabled!${RESET_COLOR}\n"
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}Enable only one of: -Djemalloc=true, -Dmimalloc=true, -Dtcmalloc=true\n"
     exit 1
 fi
 # load the jemalloc
@@ -175,6 +181,21 @@ if [ "$MIMALLOC_ENABLED" = "true" ]; then
     printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}Enabling mimalloc!\n"
     export LD_PRELOAD="/usr/local/lib/libmimalloc.so"
 fi
+
+# tcmalloc (down from skullian's)
+
+if [ "$TCMALLOC_ENABLED" = "true" ]; then
+    TCMALLOC_LIB=$(ldconfig -p 2>/dev/null | awk '/libtcmalloc_minimal\.so/{print $NF; exit}')
+    if [ -z "$TCMALLOC_LIB" ]; then
+        printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}${LIGHT_RED}ERROR: tcmalloc requested but library was not found!${RESET_COLOR}\n"
+        exit 1
+    fi
+
+    printf "${CYAN}container@memory-allocator~ ${RESET_COLOR}Enabling tcmalloc!\n"
+    export LD_PRELOAD="$TCMALLOC_LIB"
+fi
+
+# malloc i've found randomly on the internet
 
 
 
